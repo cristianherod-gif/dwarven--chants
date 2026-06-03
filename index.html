@@ -30,9 +30,7 @@ body {
 .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
 .screen.active { display: flex; }
 
-/* ══════════════════════════════
-   MENU
-══════════════════════════════ */
+/* ══ MENU ══ */
 #screen-menu {
   min-height: 100vh;
   background: url('Gemini_Generated_Image_phje5xphje5xphje.png') center center / cover no-repeat;
@@ -43,217 +41,137 @@ body {
   position: relative;
   overflow: hidden;
 }
-
-/* Dark overlay so text is readable */
 #screen-menu::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.55) 0%,
-    rgba(0,0,0,0.2) 40%,
-    rgba(0,0,0,0.15) 60%,
-    rgba(0,0,0,0.65) 100%
-  );
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.65) 100%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Stars removed — real background image used */
-
-.menu-left {
-  flex: 1;
-  max-width: 220px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 0 40px 32px;
-  position: relative;
-  z-index: 1;
-}
-
-.menu-center {
-  flex: 0 0 460px;
-  display: flex;
+/* ══ SELECT SCREEN ══ */
+#screen-select {
+  min-height: 100vh;
+  background: url('Gemini_Generated_Image_phje5xphje5xphje.png') center center / cover no-repeat;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  position: relative;
-  z-index: 1;
-}
-
-.menu-right {
-  flex: 1;
-  max-width: 260px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 40px 32px 40px 16px;
-  position: relative;
-  z-index: 1;
-}
-
-/* Title */
-.game-logo {
-  text-align: center;
-  margin-bottom: 8px;
-}
-.game-logo .title-top {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(48px, 7vw, 76px);
-  font-weight: 900;
-  color: #C8C4B8;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  text-shadow:
-    0 0 40px rgba(212,160,23,0.3),
-    0 2px 0 #3A3530,
-    0 4px 12px rgba(0,0,0,0.8);
-  display: block;
-}
-.game-logo .title-bot {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(44px, 6.5vw, 68px);
-  font-weight: 900;
-  color: var(--gold-light);
-  letter-spacing: 0.1em;
-  line-height: 1;
-  text-shadow:
-    0 0 60px rgba(212,160,23,0.5),
-    0 2px 0 var(--gold-dark),
-    0 6px 20px rgba(0,0,0,0.9);
-  display: block;
-}
-
-/* Drakkar */
-#drakkar-wrap {
-  width: 340px;
-  height: 160px;
-  position: relative;
-  margin: 12px 0 20px;
-}
-#drakkar-canvas { display: block; }
-
-/* Menu buttons */
-.menu-nav { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
-
-.mnav-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 13px 24px;
-  background: linear-gradient(180deg, rgba(60,50,30,0.9) 0%, rgba(30,25,15,0.95) 100%);
-  color: var(--gold-light);
-  border: 1px solid var(--gold-dark);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.18s;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  padding: 32px 20px 120px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,100,0.1);
 }
-.mnav-btn::before {
+#screen-select::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(212,160,23,0.08), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
+  background: rgba(0,0,0,0.78);
+  pointer-events: none;
+  z-index: 0;
 }
+#screen-select > * { position: relative; z-index: 1; }
+
+.select-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  text-shadow: 0 0 20px rgba(212,160,23,0.5);
+}
+.select-sub {
+  font-size: 14px;
+  color: var(--iron-light);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Step dots */
+.step-indicator { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+.step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--iron); transition: all 0.3s; }
+.step-dot.active { background: var(--gold); box-shadow: 0 0 10px rgba(212,160,23,0.6); }
+.step-dot.done { background: var(--teal); }
+.step-line { width: 40px; height: 1px; background: var(--iron); }
+
+/* Char cards */
+.chars-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 860px; }
+.char-card {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer; transition: all 0.2s; padding: 10px; border-radius: 8px;
+  border: 2px solid rgba(212,160,23,0.15); background: rgba(10,8,5,0.8);
+  width: 145px; position: relative;
+}
+.char-card:hover { border-color: var(--gold-dark); transform: translateY(-5px); }
+.char-card.selected { border-color: var(--gold-light); background: rgba(80,50,5,0.5); box-shadow: 0 0 28px rgba(212,160,23,0.35); }
+.char-name { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: var(--gold-light); text-align: center; letter-spacing: 0.08em; }
+.char-instrument { font-size: 11px; color: var(--iron-light); font-style: italic; text-align: center; }
+.char-selected-mark { position: absolute; top: 6px; right: 8px; color: var(--gold); font-size: 16px; opacity: 0; transition: opacity 0.2s; }
+.char-card.selected .char-selected-mark { opacity: 1; }
+
+/* Song cards */
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; width: 100%; max-width: 700px; margin-top: 8px;
+}
+.song-card-sel {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 12px; border-radius: 6px; border: 1.5px solid var(--iron);
+  background: rgba(10,8,5,0.85); cursor: pointer; transition: all 0.2s;
+  position: relative; text-align: center;
+}
+.song-card-sel:hover:not(.locked) { border-color: var(--gold-dark); transform: translateY(-3px); }
+.song-card-sel.selected { border-color: var(--gold); background: rgba(80,50,5,0.5); box-shadow: 0 0 20px rgba(212,160,23,0.3); }
+.song-card-sel.locked { opacity: 0.4; cursor: not-allowed; }
+.song-card-sel .sc-icon { font-size: 26px; }
+.song-card-sel .sc-title { font-family: 'Cinzel', serif; font-size: 11px; color: var(--gold-light); font-weight: 700; }
+.song-card-sel .sc-req { font-size: 10px; color: var(--iron-light); font-style: italic; }
+.song-lock { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; border-radius: 6px; }
+
+.select-actions { display: flex; gap: 12px; margin-top: 24px; }
+
+.menu-left { flex: 1; max-width: 220px; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 0 40px 32px; position: relative; z-index: 1; }
+.menu-center { flex: 0 0 460px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; z-index: 1; }
+.menu-right { flex: 1; max-width: 260px; display: flex; flex-direction: column; justify-content: center; padding: 40px 32px 40px 16px; position: relative; z-index: 1; }
+#drakkar-wrap { width: 340px; height: 160px; position: relative; margin: 12px 0 20px; }
+#drakkar-canvas { display: block; }
+.menu-nav { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
+.mnav-btn {
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 13px 24px; background: linear-gradient(180deg, rgba(60,50,30,0.9) 0%, rgba(30,25,15,0.95) 100%);
+  color: var(--gold-light); border: 1px solid var(--gold-dark); border-radius: 3px; cursor: pointer;
+  transition: all 0.18s; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,220,100,0.1);
+}
+.mnav-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(212,160,23,0.08), transparent); opacity: 0; transition: opacity 0.2s; }
 .mnav-btn:hover { border-color: var(--gold); color: #fff; transform: translateX(4px); box-shadow: 0 4px 20px rgba(212,160,23,0.2), inset 0 1px 0 rgba(255,220,100,0.15); }
 .mnav-btn:hover::before { opacity: 1; }
 .mnav-btn:active { transform: translateX(2px) scale(0.99); }
-.mnav-btn.primary {
-  background: linear-gradient(180deg, rgba(120,80,10,0.95) 0%, rgba(70,45,5,0.98) 100%);
-  border-color: var(--gold-light);
-  font-size: 17px;
-  padding: 16px 24px;
-  box-shadow: 0 4px 24px rgba(212,160,23,0.25), inset 0 1px 0 rgba(255,220,100,0.2);
-}
+.mnav-btn.primary { background: linear-gradient(180deg, rgba(120,80,10,0.95) 0%, rgba(70,45,5,0.98) 100%); border-color: var(--gold-light); font-size: 17px; padding: 16px 24px; box-shadow: 0 4px 24px rgba(212,160,23,0.25), inset 0 1px 0 rgba(255,220,100,0.2); }
 .mnav-btn .btn-icon { font-size: 18px; min-width: 24px; text-align: center; }
-
-/* Rune divider */
-.rune-div {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; margin: 10px 0;
-}
-.rune-div::before, .rune-div::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
-}
+.rune-div { display: flex; align-items: center; gap: 10px; width: 100%; margin: 10px 0; }
+.rune-div::before, .rune-div::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dark), transparent); }
 .rune-div span { color: var(--gold-dark); font-size: 13px; letter-spacing: 4px; }
-
-/* Leaderboard */
-.lb-box {
-  background: linear-gradient(180deg, rgba(20,17,10,0.95) 0%, rgba(15,13,8,0.98) 100%);
-  border: 1px solid var(--gold-dark);
-  border-radius: 4px;
-  padding: 14px;
-  width: 100%;
-}
-.lb-title {
-  font-family: 'Cinzel', serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  color: var(--gold);
-  text-align: center;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-.lb-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 4px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  font-size: 13px;
-}
+.lb-box { background: linear-gradient(180deg, rgba(20,17,10,0.95) 0%, rgba(15,13,8,0.98) 100%); border: 1px solid var(--gold-dark); border-radius: 4px; padding: 14px; width: 100%; }
+.lb-title { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; letter-spacing: 0.15em; color: var(--gold); text-align: center; margin-bottom: 10px; text-transform: uppercase; }
+.lb-row { display: flex; align-items: center; gap: 8px; padding: 5px 4px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
 .lb-row:last-child { border-bottom: none; }
 .lb-rank { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold-dark); min-width: 20px; font-size: 12px; }
-.lb-rank.gold { color: #FFD700; }
-.lb-rank.silver { color: #C0C0C0; }
-.lb-rank.bronze { color: #CD7F32; }
+.lb-rank.gold { color: #FFD700; } .lb-rank.silver { color: #C0C0C0; } .lb-rank.bronze { color: #CD7F32; }
 .lb-name { flex: 1; color: #C8C0B0; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.05em; }
 .lb-score { color: var(--gold-light); font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; }
-
-/* News box */
-.news-box {
-  background: rgba(20,17,10,0.8);
-  border: 1px solid rgba(212,160,23,0.2);
-  border-radius: 4px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
-  font-size: 13px;
-}
+.news-box { background: rgba(20,17,10,0.8); border: 1px solid rgba(212,160,23,0.2); border-radius: 4px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; }
 .news-label { font-family: 'Cinzel', serif; font-size: 10px; color: var(--gold-dark); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
 .news-text { color: var(--iron-light); font-style: italic; line-height: 1.5; }
-
-/* Key hint */
 .key-row { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
 .key-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .key-badge kbd { display: inline-block; width: 38px; height: 38px; line-height: 36px; text-align: center; font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; background: rgba(30,28,42,0.9); border: 1px solid var(--iron); border-bottom: 3px solid var(--iron-light); border-radius: 5px; color: #E8E0D0; }
 .key-badge .ldot { width: 8px; height: 8px; border-radius: 50%; }
 
-/* ══════════════════════════════
-   GAME
-══════════════════════════════ */
-#screen-game {
-  background: var(--stone-deeper);
-  min-height: 100vh;
-}
-#game-header {
-  width: 100%; max-width: 640px;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 20px 6px;
-}
+/* ══ GAME ══ */
+#screen-game { background: var(--stone-deeper); min-height: 100vh; }
+#game-header { width: 100%; max-width: 640px; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px 6px; }
 .stat-block { text-align: center; min-width: 80px; }
 .stat-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dark); }
 .stat-value { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--gold-light); line-height: 1.1; }
@@ -271,18 +189,11 @@ body {
 #pause-overlay h2 { font-family: 'Cinzel', serif; font-size: 36px; font-weight: 900; color: var(--gold-light); text-shadow: 0 0 30px rgba(212,160,23,0.4); }
 #touch-buttons { display: flex; width: min(600px, 100vw); }
 .touch-btn { flex: 1; height: 52px; border: none; cursor: pointer; font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; color: rgba(0,0,0,0.7); transition: filter 0.1s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 5px; opacity: 0.9; }
-.touch-btn:first-child { border-radius: 0 0 0 8px; }
-.touch-btn:last-child  { border-radius: 0 0 8px 0; }
+.touch-btn:first-child { border-radius: 0 0 0 8px; } .touch-btn:last-child { border-radius: 0 0 8px 0; }
 .touch-btn.pressed { filter: brightness(1.3); transform: scaleY(0.94); }
 
-/* ══════════════════════════════
-   GAME OVER
-══════════════════════════════ */
-#screen-over {
-  min-height: 100vh;
-  background: radial-gradient(ellipse at 50% 30%, rgba(200,75,17,0.12) 0%, transparent 60%), var(--stone-deeper);
-  padding: 60px 20px; gap: 14px; text-align: center;
-}
+/* ══ GAME OVER ══ */
+#screen-over { min-height: 100vh; background: radial-gradient(ellipse at 50% 30%, rgba(200,75,17,0.12) 0%, transparent 60%), var(--stone-deeper); padding: 60px 20px; gap: 14px; text-align: center; }
 .grade-badge { font-family: 'Cinzel', serif; font-size: 72px; font-weight: 900; color: var(--gold-light); text-shadow: 0 0 50px rgba(212,160,23,0.6); line-height: 1; }
 .over-title { font-family: 'Cinzel', serif; font-size: 32px; font-weight: 900; color: var(--ember-light); }
 .over-sub { font-size: 18px; color: var(--iron-light); font-style: italic; }
@@ -294,15 +205,12 @@ body {
 .menu-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,160,23,0.35); }
 .menu-btn.secondary { background: var(--stone); color: var(--gold); border-color: var(--gold-dark); }
 
-/* Responsive */
 @media (max-width: 700px) {
-  #screen-menu { flex-direction: column; padding: 24px 16px 40px; }
-  .menu-left, .menu-right { max-width: 100%; padding: 0; }
-  .menu-left { display: none; }
-  .menu-right { padding: 0; width: 100%; max-width: 100%; }
-  .menu-center { flex: none; padding: 0; width: 100%; }
-  .lb-box { margin-top: 24px; }
-  #drakkar-wrap { width: 260px; height: 120px; }
+  #screen-menu { flex-direction: column; }
+  #screen-menu > div:first-child { width: 100%; padding: 16px 16px 8px; }
+  .chars-row { gap: 8px; }
+  .char-card { width: 120px; padding: 8px; }
+  .songs-grid { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -312,61 +220,34 @@ body {
 <!-- ══ MENU ══ -->
 <div id="screen-menu" class="screen active">
 
-  <!-- Logo top center -->
-  <div style="position:relative;z-index:1;text-align:center;padding-top:28px;">
-    <div style="
-      font-family:'Cinzel',serif;
-      line-height:1;
-      filter:drop-shadow(0 4px 24px rgba(0,0,0,0.9));
-    ">
-      <div style="
-        font-size:clamp(52px,8vw,88px);
-        font-weight:900;
-        letter-spacing:0.12em;
-        color:transparent;
-        background: linear-gradient(180deg, #E8E0C8 0%, #C8B88A 40%, #8B6914 100%);
-        -webkit-background-clip:text;
-        background-clip:text;
-        text-shadow:none;
-        filter:drop-shadow(0 2px 8px rgba(0,0,0,1)) drop-shadow(0 0 30px rgba(100,60,0,0.6));
-      ">DWARVEN</div>
-      <div style="
-        font-size:clamp(60px,9.5vw,104px);
-        font-weight:900;
-        letter-spacing:0.1em;
-        color:transparent;
-        background: linear-gradient(180deg, #FFD966 0%, #D4A017 45%, #7A5810 100%);
-        -webkit-background-clip:text;
-        background-clip:text;
-        text-shadow:none;
-        filter:drop-shadow(0 3px 10px rgba(0,0,0,1)) drop-shadow(0 0 40px rgba(212,160,23,0.5));
-        margin-top:-8px;
-      ">CHANTS</div>
-      <div style="
-        font-size:clamp(12px,1.5vw,18px);
-        font-weight:400;
-        letter-spacing:0.3em;
-        color:#8B7A4A;
-        text-transform:uppercase;
-        margin-top:2px;
-        font-style:italic;
-        text-shadow:0 2px 8px rgba(0,0,0,0.9);
-      ">A Rhythm of Rocks</div>
+  <!-- Leaderboard fijo izquierda -->
+  <div style="position:fixed;top:50%;left:16px;transform:translateY(-50%);z-index:10;width:185px;max-height:80vh;overflow:hidden;">
+    <div style="background:rgba(8,7,12,0.92);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:12px;backdrop-filter:blur(6px);">
+      <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--gold);text-align:center;margin-bottom:8px;text-transform:uppercase;">⚜ Leaderboard</div>
+      <div id="lb-rows" style="font-size:11px;"></div>
     </div>
   </div>
 
-  <!-- Play button center -->
-  <div style="position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;">
+  <!-- Centro: logo + botón -->
+  <div style="position:relative;z-index:1;width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px 0;">
+    <img src="Gemini_Generated_Image_66md2d66md2d66md-removebg-preview (1).png" alt="Dwarven Chants"
+      style="max-width:min(600px,65vw);height:auto;filter:drop-shadow(0 4px 24px rgba(0,0,0,0.8));">
     <button class="mnav-btn primary" id="btn-play"
-      style="font-size:22px;padding:20px 80px;letter-spacing:0.14em;box-shadow:0 0 40px rgba(212,160,23,0.35),0 8px 32px rgba(0,0,0,0.7);">
+      style="font-size:22px;padding:20px 80px;letter-spacing:0.14em;box-shadow:0 0 40px rgba(212,160,23,0.35),0 8px 32px rgba(0,0,0,0.7);margin-top:8px;">
       ⚔ JUGAR
     </button>
+    <div style="display:flex;gap:8px;">
+      <button id="btn-lang-es"
+        style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;padding:7px 18px;background:rgba(120,80,10,0.95);color:var(--gold-light);border:1.5px solid var(--gold);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
+        onclick="setLang('es')">🇪🇸 ES</button>
+      <button id="btn-lang-en"
+        style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;padding:7px 18px;background:rgba(30,28,42,0.95);color:var(--iron-light);border:1.5px solid var(--iron);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
+        onclick="setLang('en')">🇬🇧 EN</button>
+    </div>
   </div>
 
   <!-- Bottom bar -->
   <div style="position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:16px 20px;z-index:10;pointer-events:none;gap:8px;">
-
-    <!-- Controls bottom-left -->
     <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);">
       <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:6px;">⚔ Controles</div>
       <div style="font-size:13px;color:var(--iron-light);margin-bottom:8px;">Pulsa cuando la nota llegue al círculo</div>
@@ -378,29 +259,46 @@ body {
       </div>
       <div style="font-size:12px;color:var(--iron-light);margin-top:8px;letter-spacing:0.05em;">ESC → Pausa</div>
     </div>
-
-    <!-- Language bottom-center -->
-    <div style="pointer-events:all;display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:4px;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:12px 18px;backdrop-filter:blur(4px);">
-      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);text-transform:uppercase;">Idioma</div>
-      <div style="display:flex;gap:8px;">
-        <button id="btn-lang-es"
-          style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;padding:8px 20px;background:rgba(120,80,10,0.95);color:var(--gold-light);border:1.5px solid var(--gold);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
-          onclick="setLang('es')">🇪🇸 ES</button>
-        <button id="btn-lang-en"
-          style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;padding:8px 20px;background:rgba(30,28,42,0.95);color:var(--iron-light);border:1.5px solid var(--iron);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
-          onclick="setLang('en')">🇬🇧 EN</button>
-      </div>
+    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);display:flex;align-items:center;gap:8px;">
+      <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:20px;padding:0;line-height:1;">🔊</button>
+      <input class="vol-slider" type="range" min="0" max="100" value="75" style="width:90px;accent-color:#D4A017;cursor:pointer;height:6px;">
     </div>
+  </div>
+</div>
 
-    <!-- Volume bottom-right -->
-    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:12px 16px;backdrop-filter:blur(4px);">
-      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:10px;">🔊 Sonido</div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:22px;padding:0;flex-shrink:0;line-height:1;">🔊</button>
-        <input class="vol-slider" type="range" min="0" max="100" value="75" style="width:90px;accent-color:#D4A017;cursor:pointer;height:6px;">
-      </div>
+<!-- ══ SELECT ══ -->
+<div id="screen-select" class="screen">
+
+  <!-- PASO 1: Elegir enano -->
+  <div id="step-chars" style="display:flex;flex-direction:column;align-items:center;width:100%;">
+    <div class="select-title" style="margin-top:8px;">⚒ Elige tu Enano</div>
+    <div class="select-sub">Cada bardo tiene su propio estilo</div>
+    <div class="step-indicator">
+      <div class="step-dot active"></div>
+      <div class="step-line"></div>
+      <div class="step-dot"></div>
     </div>
+    <div class="chars-row" id="chars-row"></div>
+    <div class="select-actions">
+      <button class="menu-btn secondary" onclick="showScreen('screen-menu')" style="font-size:14px;padding:10px 28px;">⬅ Volver</button>
+      <button class="menu-btn" id="btn-next-songs" style="font-size:16px;padding:12px 40px;">Elegir canción ▶</button>
+    </div>
+  </div>
 
+  <!-- PASO 2: Elegir canción -->
+  <div id="step-songs" style="display:none;flex-direction:column;align-items:center;width:100%;">
+    <div class="select-title" style="margin-top:8px;">♪ Elige Canción</div>
+    <div class="select-sub" id="char-subtitle">Tocando con Brokkr • Guitarra</div>
+    <div class="step-indicator">
+      <div class="step-dot done"></div>
+      <div class="step-line"></div>
+      <div class="step-dot active"></div>
+    </div>
+    <div class="songs-grid" id="songs-grid"></div>
+    <div class="select-actions">
+      <button class="menu-btn secondary" id="btn-back-chars" style="font-size:14px;padding:10px 28px;">◀ Cambiar enano</button>
+      <button class="menu-btn" id="btn-start-game" style="font-size:16px;padding:12px 40px;">⚔ ¡A tocar!</button>
+    </div>
   </div>
 
 </div>
@@ -456,51 +354,105 @@ body {
     <div class="result-card"><div class="rc-label">Notas</div><div class="rc-value" id="over-hits">0</div></div>
     <div class="result-card"><div class="rc-label">Precisión</div><div class="rc-value" id="over-acc">0%</div></div>
   </div>
-  <button class="menu-btn" id="btn-retry">↺ Otra vez</button>
-  <button class="menu-btn secondary" id="btn-menu" style="margin-top:8px">⬅ Menú</button>
+
+  <!-- Name input -->
+  <div id="name-input-wrap" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:4px;">
+    <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;">¿Cómo te llamas, enano?</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input id="player-name-input" type="text" maxlength="16" placeholder="Tu nombre..."
+        style="font-family:'Cinzel',serif;font-size:15px;padding:8px 14px;background:rgba(20,17,10,0.9);border:1.5px solid var(--gold-dark);border-radius:4px;color:var(--gold-light);outline:none;width:180px;letter-spacing:0.05em;"
+        onkeydown="if(event.key==='Enter') saveScore()">
+      <button onclick="saveScore()" class="menu-btn" style="font-size:13px;padding:9px 20px;">✦ Guardar</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:12px;">
+    <button class="menu-btn" id="btn-retry">↺ Otra vez</button>
+    <button class="menu-btn secondary" id="btn-menu" style="margin-top:0">⬅ Menú</button>
+  </div>
   <div style="margin-top:12px;" id="vol-over-wrap"></div>
 </div>
 
 </div><!-- #app -->
 
 <script>
-// ═══════════════════════════════
-//  🎵 CANCIONES — EDITA AQUÍ
-// ═══════════════════════════════
+// ═══════════════════════════════════════════
+//  🎵 CANCIONES JUGABLES (sin The Mountain)
+// ═══════════════════════════════════════════
 const SONGS = [
-  { file: 'stormforge_oar_song.mp3', title: 'Stormforge Oar Song', icon: '⚓' },
-  { file: 'the_mountain-bold-hip-hop-133268.mp3', title: 'The Mountain', icon: '⛰️' },
+  { file: 'guitarra1.mp3', title: 'Guitarra 1',        icon: '🎸', unlockScore: 0     },
+  { file: 'gaita1.mp3',    title: 'Gaita 1',           icon: '🎵', unlockScore: 0     },
+  { file: 'song3.mp3',     title: 'Forge & Fire',      icon: '🔥', unlockScore: 8000  },
+  { file: 'song4.mp3',     title: 'El Trompetero Loco',icon: '🎺', unlockScore: 15000 },
+  { file: 'song5.mp3',     title: 'Deep Roads',        icon: '⛏️', unlockScore: 25000 },
 ];
 
-// Leaderboard (puedes editar los nombres y puntuaciones)
-const LEADERBOARD = [
-  { name: 'THORGRIM',    score: 999999 },
-  { name: 'STONEBEARD',  score: 987654 },
-  { name: 'IRONSONG',    score: 975310 },
-  { name: 'DWARFHAMMER', score: 812345 },
-  { name: 'ROCKBREAKER', score: 723456 },
-];
-// ═══════════════════════════════
+// Música de fondo del menú/selección — NO aparece como opción jugable
+const MENU_MUSIC_FILE = 'the_mountain-bold-hip-hop-133268.mp3';
 
-// ── LEADERBOARD ──
-function buildLeaderboard() {
-  const saved = JSON.parse(localStorage.getItem('dc_scores') || '[]');
-  const all = [...LEADERBOARD, ...saved].sort((a,b) => b.score - a.score).slice(0, 8);
+// ── PERSONAJES ──
+const CHARACTERS = [
+  { id:0, name:'Brokkr',  instrument:'Guitarra',    color:'#5DCAA5', beard:'#C8A060', shirt:'#4A7A5A' },
+  { id:1, name:'Dvalin',  instrument:'Batería',     color:'#85B7EB', beard:'#D4A880', shirt:'#3A5A8A' },
+  { id:2, name:'Sindri',  instrument:'Gaita',       color:'#F0997B', beard:'#A87840', shirt:'#8A3A2A' },
+  { id:3, name:'Alvíss',  instrument:'Hurdy Gurdy', color:'#C8A0E8', beard:'#E8D0A0', shirt:'#5A3A8A' },
+  { id:4, name:'Paco',    instrument:'Trompeta 🌮', color:'#FAC775', beard:'#303030', shirt:'#CC2200' },
+];
+
+// ═══════════════════════════════════════════
+//  🏆 SUPABASE — Leaderboard online
+// ═══════════════════════════════════════════
+const SUPABASE_URL = 'https://efnasjkoowyonckwhyaq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_R5EiPOVyrmgJxMmDEBJkQQ_ooeUzxWl';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || '',
+    },
+    method: options.method || 'GET',
+    body: options.body || undefined,
+  });
+  if (!res.ok) return null;
+  try { return await res.json(); } catch { return null; }
+}
+
+const INSTRICON = { 'Guitarra':'🎸', 'Batería':'🥁', 'Gaita':'🎵', 'Hurdy Gurdy':'🎻', 'Trompeta 🌮':'🎺' };
+const FALLBACK_LB = [];
+
+let selectedChar = 0;
+let selectedSong = 0;
+
+async function buildLeaderboard() {
   const el = document.getElementById('lb-rows');
+  if (!el) return;
+  el.innerHTML = '<div style="color:var(--iron-light);font-size:10px;text-align:center;padding:8px;">Cargando...</div>';
+  const data = await sbFetch('leaderboard?select=name,score,instrument&order=score.desc&limit=10');
+  const rows = (data && data.length > 0) ? data : [];
+  if (rows.length === 0) {
+    el.innerHTML = '<div style="color:var(--iron-light);font-size:10px;text-align:center;padding:8px;font-style:italic;">¡Sé el primero en entrar!</div>';
+    return;
+  }
   const ranks = ['🥇','🥈','🥉'];
-  el.innerHTML = all.map((r,i) => `
-    <div class="lb-row">
-      <span class="lb-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${ranks[i]||i+1}</span>
-      <span class="lb-name">${r.name}</span>
-      <span class="lb-score">${r.score.toLocaleString()}</span>
-    </div>`).join('');
+  el.innerHTML = rows.map((r,i) => {
+    const icon = r.instrument ? (INSTRICON[r.instrument] || '🎵') : '';
+    return `<div style="display:flex;align-items:center;gap:6px;padding:4px 2px;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <span style="font-family:'Cinzel',serif;font-weight:700;color:${i===0?'#FFD700':i===1?'#C0C0C0':i===2?'#CD7F32':'var(--gold-dark)'};min-width:18px;font-size:11px;">${ranks[i]||i+1}</span>
+      ${icon ? `<span style="font-size:12px;">${icon}</span>` : ''}
+      <span style="flex:1;color:#C8C0B0;font-family:'Cinzel',serif;font-size:10px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${r.name}</span>
+      <span style="color:var(--gold-light);font-family:'Cinzel',serif;font-size:10px;font-weight:700;white-space:nowrap;">${r.score.toLocaleString()}</span>
+    </div>`;
+  }).join('');
 }
 buildLeaderboard();
 
 // ── LANGUAGE ──
 const TEXTS = {
-  es: { play:'⚔ JUGAR', controls:'⚔ Controles', hint:'Pulsa cuando la nota llegue al círculo', pause:'ESC → Pausa', sound:'🔊 Sonido', perfect:'✦ PERFECTO', good:'¡Bien!', early:'Demasiado pronto', miss:'Fallado' },
-  en: { play:'⚔ PLAY',  controls:'⚔ Controls',  hint:'Hit when the note reaches the circle',   pause:'ESC → Pause', sound:'🔊 Sound',  perfect:'✦ PERFECT',  good:'Good!',  early:'Too early',    miss:'Missed'  },
+  es: { play:'⚔ JUGAR', perfect:'✦ PERFECTO', good:'¡Bien!', early:'Demasiado pronto', miss:'Fallado' },
+  en: { play:'⚔ PLAY',  perfect:'✦ PERFECT',  good:'Good!',  early:'Too early',        miss:'Missed'  },
 };
 let currentLang = localStorage.getItem('dc_lang') || 'es';
 function setLang(lang) {
@@ -519,49 +471,49 @@ function setLang(lang) {
 function T(key) { return (TEXTS[currentLang]||TEXTS.es)[key] || TEXTS.es[key]; }
 
 // ── AUDIO ──
-let audio = new Audio();
-let selectedSong = 1; // The Mountain por defecto en el menú
+// Dos objetos de audio separados: fondo y juego
+let bgAudio = new Audio();
+let gameAudio = new Audio();
 let globalVolume = 0.75;
 let globalMuted = false;
 
 function applyVolume() {
-  audio.volume = globalMuted ? 0 : globalVolume;
-  // Update all volume UIs
+  bgAudio.volume   = globalMuted ? 0 : globalVolume * 0.55;
+  gameAudio.volume = globalMuted ? 0 : globalVolume;
   document.querySelectorAll('.vol-slider').forEach(s => s.value = globalVolume * 100);
   document.querySelectorAll('.vol-mute').forEach(b => b.textContent = globalMuted ? '🔇' : '🔊');
 }
 
-function playSelectedSong() {
-  if (!SONGS.length) return;
+function startBgMusic() {
+  if (!bgAudio.paused) return;
+  bgAudio.pause();
+  bgAudio = new Audio(MENU_MUSIC_FILE);
+  bgAudio.loop = true;
+  bgAudio.volume = globalMuted ? 0 : globalVolume * 0.55;
+  bgAudio.play().catch(()=>{});
+}
+
+function stopBgMusic() { bgAudio.pause(); bgAudio.currentTime = 0; }
+
+function startGameMusic() {
+  stopBgMusic();
+  gameAudio.pause();
   const song = SONGS[selectedSong];
-  try {
-    audio.pause();
-    audio = new Audio();
-    audio.loop = true;
-    audio.volume = globalMuted ? 0 : globalVolume;
-    audio.onerror = () => {
-      const s = document.getElementById('audio-status');
-      if(s) s.textContent = '⚠ No se encontró: ' + song.file;
-    };
-    audio.oncanplaythrough = () => { audio.play().catch(()=>{}); };
-    audio.src = song.file;
-    audio.load();
-    const bar = document.getElementById('song-title-bar');
-    if(bar) bar.textContent = '♪ ' + song.title;
+  gameAudio = new Audio(song.file);
+  gameAudio.loop = false;
+  gameAudio.volume = globalMuted ? 0 : globalVolume;
+  gameAudio.onerror = () => {
     const s = document.getElementById('audio-status');
-    if(s) s.textContent = '';
-  } catch(e) { console.error(e); }
-}
-
-// Keeps audio playing but updates title bar when switching screens
-function updateAudioUI() {
+    if(s) s.textContent = '⚠ No se encontró: ' + song.file;
+  };
+  gameAudio.play().catch(()=>{});
+  gameAudio.addEventListener('ended', () => { endGame('song'); });
   const bar = document.getElementById('song-title-bar');
-  if(bar && SONGS[selectedSong]) bar.textContent = audio.paused ? '♪ ' + SONGS[selectedSong].title : '♪ ' + SONGS[selectedSong].title;
+  if(bar) bar.textContent = '♪ ' + song.title;
 }
 
-function stopAudio() { audio.pause(); audio.currentTime = 0; }
+function stopGameMusic() { gameAudio.pause(); gameAudio.currentTime = 0; }
 
-// Volume control HTML snippet
 function volumeControlHTML(id) {
   return `<div class="vol-ctrl" id="${id}" style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(0,0,0,0.3);border-radius:4px;border:1px solid rgba(212,160,23,0.2);">
     <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:18px;padding:0;">🔊</button>
@@ -572,18 +524,11 @@ function volumeControlHTML(id) {
 function setupVolumeControls() {
   document.querySelectorAll('.vol-slider').forEach(slider => {
     slider.value = globalVolume * 100;
-    slider.addEventListener('input', () => {
-      globalVolume = slider.value / 100;
-      globalMuted = false;
-      applyVolume();
-    });
+    slider.oninput = () => { globalVolume = slider.value / 100; globalMuted = false; applyVolume(); };
   });
   document.querySelectorAll('.vol-mute').forEach(btn => {
     btn.textContent = globalMuted ? '🔇' : '🔊';
-    btn.addEventListener('click', () => {
-      globalMuted = !globalMuted;
-      applyVolume();
-    });
+    btn.onclick = () => { globalMuted = !globalMuted; applyVolume(); };
   });
 }
 
@@ -591,32 +536,113 @@ function setupVolumeControls() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'screen-menu') { setLang(currentLang); updateSongList(); }
+  if (id === 'screen-menu')  { setLang(currentLang); stopGameMusic(); startBgMusic(); buildLeaderboard(); }
+  if (id === 'screen-select'){ stopGameMusic(); buildCharSelect(); startBgMusic(); }
+  if (id === 'screen-over')  { stopGameMusic(); startBgMusic(); buildLeaderboard(); }
   setupVolumeControls();
 }
 
-// ── SONG SELECT ──
-function updateSongList() {
-  const list = document.getElementById('song-list');
-  if (!list) return;
-  list.innerHTML = SONGS.map((s,i) => `
-    <div class="song-card ${i===selectedSong?'selected':''}" data-idx="${i}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${i===selectedSong?'rgba(120,80,10,0.4)':'rgba(20,17,10,0.8)'};border:1px solid ${i===selectedSong?'var(--gold)':'var(--gold-dark)'};border-radius:3px;cursor:pointer;transition:all 0.2s;margin-bottom:6px;">
-      <span style="font-size:20px">${s.icon}</span>
-      <div style="flex:1">
-        <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light)">${s.title}</div>
-        <div style="font-size:11px;color:var(--iron-light);font-style:italic">${s.file}</div>
-      </div>
-      ${i===selectedSong?'<span style="color:var(--gold)">▶</span>':''}
-    </div>`).join('');
-  document.querySelectorAll('.song-card').forEach(card => {
+// ── CHARACTER DRAWING ──
+function drawCharacter(canvas, char) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const cx = W/2, cy = H*0.72;
+  ctx.fillStyle=char.shirt; ctx.fillRect(cx-14,cy-36,28,28);
+  ctx.fillStyle='#3A2808'; ctx.fillRect(cx-14,cy-12,28,6);
+  ctx.fillStyle='#D4A017'; ctx.fillRect(cx-4,cy-12,8,6);
+  ctx.fillStyle='#2A2030'; ctx.fillRect(cx-12,cy-6,10,18); ctx.fillRect(cx+2,cy-6,10,18);
+  ctx.fillStyle='#1A0E06'; ctx.fillRect(cx-13,cy+10,11,8); ctx.fillRect(cx+2,cy+10,11,8);
+  ctx.fillStyle='#D4A890'; ctx.beginPath(); ctx.arc(cx,cy-48,14,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#888A8C'; ctx.beginPath(); ctx.arc(cx,cy-54,14,Math.PI,0); ctx.fill();
+  ctx.fillRect(cx-14,cy-54,4,8); ctx.fillRect(cx+10,cy-54,4,8);
+  ctx.fillStyle='#C8C4B8';
+  ctx.beginPath(); ctx.moveTo(cx-13,cy-60); ctx.lineTo(cx-22,cy-76); ctx.lineTo(cx-7,cy-60); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx+13,cy-60); ctx.lineTo(cx+22,cy-76); ctx.lineTo(cx+7,cy-60); ctx.closePath(); ctx.fill();
+  ctx.fillStyle=char.beard;
+  ctx.beginPath(); ctx.moveTo(cx-11,cy-36); ctx.lineTo(cx-14,cy-14); ctx.lineTo(cx+14,cy-14); ctx.lineTo(cx+11,cy-36); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx-10,cy-14); ctx.lineTo(cx,cy+2); ctx.lineTo(cx+10,cy-14); ctx.fill();
+  ctx.fillStyle='#1A1008';
+  ctx.beginPath(); ctx.arc(cx-5,cy-50,2,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+5,cy-50,2,0,Math.PI*2); ctx.fill();
+  if(char.instrument==='Guitarra'){
+    ctx.fillStyle='#BA7517'; ctx.beginPath(); ctx.ellipse(cx+22,cy-22,8,12,0.3,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#412402'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(cx+26,cy-32); ctx.lineTo(cx+30,cy-44); ctx.stroke();
+  } else if(char.instrument==='Batería'){
+    ctx.fillStyle='#CC3322'; ctx.strokeStyle='#881100'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.ellipse(cx+18,cy-16,12,8,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx+28,cy-26,7,5,0.3,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle='#D4A017'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(cx+10,cy-28); ctx.lineTo(cx+20,cy-18); ctx.stroke();
+  } else if(char.instrument==='Gaita'){
+    ctx.fillStyle='#5A3A1A'; ctx.beginPath(); ctx.ellipse(cx+16,cy-28,10,14,0.1,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#C8A060'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(cx+6,cy-40); ctx.quadraticCurveTo(cx+20,cy-50,cx+28,cy-38); ctx.stroke();
+  } else if(char.instrument==='Hurdy Gurdy'){
+    ctx.fillStyle='#8B6030'; ctx.fillRect(cx+10,cy-36,22,16);
+    ctx.fillStyle='#C8A060'; ctx.fillRect(cx+10,cy-28,22,4);
+    ctx.fillStyle='#5A3010'; ctx.beginPath(); ctx.arc(cx+21,cy-24,5,0,Math.PI*2); ctx.fill();
+  } else if(char.instrument.includes('Trompeta')){
+    ctx.fillStyle='#D4A017'; ctx.strokeStyle='#8B6914'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(cx+8,cy-32); ctx.lineTo(cx+28,cy-32); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx+32,cy-32,6,10,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#D4A017'; ctx.beginPath(); ctx.arc(cx+16,cy-34,3,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx+22,cy-34,3,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#8B1A00';
+    ctx.beginPath(); ctx.ellipse(cx,cy-65,20,5,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx-10,cy-65); ctx.lineTo(cx-6,cy-82); ctx.lineTo(cx+6,cy-82); ctx.lineTo(cx+10,cy-65); ctx.fill();
+    ctx.strokeStyle='#FFD700'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.ellipse(cx,cy-65,20,5,0,0,Math.PI*2); ctx.stroke();
+  }
+}
+
+// ── BUILD CHARACTER SELECT ──
+function buildCharSelect() {
+  document.getElementById('step-chars').style.display = 'flex';
+  document.getElementById('step-songs').style.display = 'none';
+  const row = document.getElementById('chars-row');
+  row.innerHTML = '';
+  CHARACTERS.forEach((char, i) => {
+    const card = document.createElement('div');
+    card.className = 'char-card' + (i===selectedChar ? ' selected' : '');
+    card.innerHTML = `<span class="char-selected-mark">✦</span><canvas width="120" height="130"></canvas><div class="char-name">${char.name}</div><div class="char-instrument">${char.instrument}</div>`;
+    drawCharacter(card.querySelector('canvas'), char);
     card.addEventListener('click', () => {
-      selectedSong = parseInt(card.dataset.idx);
-      playSelectedSong();
-      updateSongList();
+      selectedChar = i;
+      document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
     });
+    row.appendChild(card);
   });
 }
 
+// ── BUILD SONG SELECT ──
+function buildSongSelect() {
+  const char = CHARACTERS[selectedChar];
+  document.getElementById('char-subtitle').textContent = `Tocando con ${char.name} • ${char.instrument}`;
+  const bestScore = Math.max(0, ...(JSON.parse(localStorage.getItem('dc_scores')||'[]').map(s=>s.score||0).concat([0])));
+  const grid = document.getElementById('songs-grid');
+  grid.innerHTML = '';
+  SONGS.forEach((song, i) => {
+    const unlocked = bestScore >= song.unlockScore;
+    const card = document.createElement('div');
+    card.className = 'song-card-sel' + (i===selectedSong ? ' selected' : '') + (unlocked ? '' : ' locked');
+    card.innerHTML = `
+      <div class="sc-icon">${song.icon}</div>
+      <div class="sc-title">${song.title}</div>
+      <div class="sc-req">${unlocked ? '✓ Disponible' : '🔒 '+song.unlockScore.toLocaleString()+' pts'}</div>
+      ${!unlocked ? '<div class="song-lock">🔒</div>' : ''}
+    `;
+    if(unlocked) {
+      card.addEventListener('click', () => {
+        selectedSong = i;
+        document.querySelectorAll('.song-card-sel').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    }
+    grid.appendChild(card);
+  });
+}
 
 // ── GAME CONSTANTS ──
 const canvas = document.getElementById('gc');
@@ -641,7 +667,6 @@ function resetState() {
   };
 }
 
-// ── HUD ──
 const hudScore=document.getElementById('hud-score');
 const hudCombo=document.getElementById('hud-combo');
 const moraleFill=document.getElementById('morale-fill');
@@ -672,7 +697,6 @@ function spawnParticles(cx,cy,color) {
   }
 }
 
-// ── HIT ──
 function hitLane(lane) {
   if (!state.running || state.isPaused) return;
   state.pressedLanes[lane]=true;
@@ -687,16 +711,15 @@ function hitLane(lane) {
     n.hit=true;state.combo++;state.maxCombo=Math.max(state.combo,state.maxCombo);
     state.hitNotes++;state.perfectNotes++;
     state.score+=150*Math.min(state.combo,10);state.morale=Math.min(100,state.morale+2.5);
-    spawnParticles(cx,HIT_Y,LANE_COLORS[lane]);showFeedback('✦ PERFECTO','#FAC775');
+    spawnParticles(cx,HIT_Y,LANE_COLORS[lane]);showFeedback(T('perfect'),'#FAC775');
   } else if(dist<=GOOD_WIN){
     n.hit=true;state.combo++;state.maxCombo=Math.max(state.combo,state.maxCombo);
     state.hitNotes++;state.score+=80*Math.min(state.combo,10);state.morale=Math.min(100,state.morale+1);
-    spawnParticles(cx,HIT_Y,LANE_COLORS[lane]);showFeedback('¡Bien!','#5DCAA5');
-  } else {state.combo=0;showFeedback('Demasiado pronto','#F0997B');}
+    spawnParticles(cx,HIT_Y,LANE_COLORS[lane]);showFeedback(T('good'),'#5DCAA5');
+  } else {state.combo=0;showFeedback(T('early'),'#F0997B');}
   updateHUD();
 }
 
-// ── DRAW ──
 function drawBG() {
   ctx.fillStyle='#18181F'; ctx.fillRect(0,0,W,H);
   for(let i=0;i<4;i++){
@@ -723,6 +746,7 @@ function drawBG() {
 
 function drawShip() {
   const cy=H-20,cx=W/2;
+  const char = CHARACTERS[selectedChar];
   ctx.fillStyle='#4A2C0A';
   ctx.beginPath();ctx.moveTo(cx-120,cy);ctx.quadraticCurveTo(cx-130,cy+18,cx,cy+22);ctx.quadraticCurveTo(cx+130,cy+18,cx+120,cy);ctx.closePath();ctx.fill();
   ctx.strokeStyle='#6B3D0F';ctx.lineWidth=1.5;ctx.stroke();
@@ -735,15 +759,22 @@ function drawShip() {
   ctx.strokeStyle='#8B6914';ctx.lineWidth=1;ctx.stroke();
   ctx.fillStyle='#4A2C0A';ctx.font='bold 16px serif';ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText('ᚦ',cx+28+sw*0.5,cy-44);
+  // Personaje seleccionado
   const dx=cx-60,bobY=Math.sin(Date.now()/500)*2;
-  ctx.fillStyle='#666';ctx.fillRect(dx-8,cy-30+bobY,16,20);
-  ctx.fillStyle='#D4A890';ctx.beginPath();ctx.arc(dx,cy-38+bobY,10,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#888';ctx.beginPath();ctx.arc(dx,cy-43+bobY,10,Math.PI,0);ctx.fill();
+  ctx.fillStyle=char.shirt;ctx.fillRect(dx-10,cy-32+bobY,20,24);
+  ctx.fillStyle='#D4A890';ctx.beginPath();ctx.arc(dx,cy-40+bobY,12,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#888';ctx.beginPath();ctx.arc(dx,cy-46+bobY,12,Math.PI,0);ctx.fill();
   ctx.strokeStyle='#D3D1C7';ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(dx-9,cy-46+bobY);ctx.lineTo(dx-16,cy-56+bobY);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(dx+9,cy-46+bobY);ctx.lineTo(dx+16,cy-56+bobY);ctx.stroke();
-  ctx.fillStyle='#A89070';ctx.beginPath();ctx.moveTo(dx-7,cy-30+bobY);ctx.lineTo(dx-9,cy-16+bobY);ctx.lineTo(dx+9,cy-16+bobY);ctx.lineTo(dx+7,cy-30+bobY);ctx.fill();
-  ctx.fillStyle='#BA7517';ctx.beginPath();ctx.ellipse(dx+20,cy-20+bobY,7,10,0.4,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.moveTo(dx-10,cy-48+bobY);ctx.lineTo(dx-18,cy-60+bobY);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(dx+10,cy-48+bobY);ctx.lineTo(dx+18,cy-60+bobY);ctx.stroke();
+  ctx.fillStyle=char.beard;ctx.beginPath();ctx.moveTo(dx-9,cy-32+bobY);ctx.lineTo(dx-11,cy-14+bobY);ctx.lineTo(dx+11,cy-14+bobY);ctx.lineTo(dx+9,cy-32+bobY);ctx.fill();
+  ctx.fillStyle=char.color;
+  if(char.instrument==='Guitarra'){ctx.beginPath();ctx.ellipse(dx+22,cy-20+bobY,7,10,0.3,0,Math.PI*2);ctx.fill();}
+  else if(char.instrument==='Batería'){ctx.beginPath();ctx.ellipse(dx+20,cy-18+bobY,10,7,0,0,Math.PI*2);ctx.fill();}
+  else if(char.instrument==='Gaita'){ctx.beginPath();ctx.ellipse(dx+18,cy-24+bobY,8,12,0.1,0,Math.PI*2);ctx.fill();}
+  else if(char.instrument==='Hurdy Gurdy'){ctx.fillRect(dx+12,cy-30+bobY,18,12);}
+  else{ctx.beginPath();ctx.ellipse(dx+28,cy-26+bobY,5,8,0,0,Math.PI*2);ctx.fill();}
+  // Tripulación
   [cx+30,cx+65,cx+95].forEach((crx,idx)=>{
     const cb=Math.sin(Date.now()/450+idx)*2;
     ctx.fillStyle='#555';ctx.fillRect(crx-5,cy-26+cb,10,16);
@@ -792,7 +823,6 @@ function drawParticles() {
   ctx.globalAlpha=1;
 }
 
-// ── LOOP ──
 function loop(ts) {
   if(!state.running)return;
   if(state.isPaused){state.animId=requestAnimationFrame(loop);return;}
@@ -809,49 +839,41 @@ function loop(ts) {
   for(const n of state.notes){
     if(!n.hit&&!n.miss){
       n.y+=NOTE_SPEED*state.spawnAccel;
-      if(n.y>HIT_Y+GOOD_WIN+12){n.miss=true;state.combo=0;state.morale=Math.max(0,state.morale-5);updateHUD();showFeedback('Fallado','#E24B4A');}
+      if(n.y>HIT_Y+GOOD_WIN+12){n.miss=true;state.combo=0;state.morale=Math.max(0,state.morale-5);updateHUD();showFeedback(T('miss'),'#E24B4A');}
     } else if(n.hit){n.y-=3;n.alpha-=0.07;} else if(n.miss){n.alpha-=0.06;}
   }
   state.notes=state.notes.filter(n=>n.alpha>0);
   for(const p of state.particles){p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.alpha-=0.04;}
   state.particles=state.particles.filter(p=>p.alpha>0);
-  if(state.morale<=0){endGame();return;}
+  if(state.morale<=0){endGame('morale');return;}
   state.animId=requestAnimationFrame(loop);
 }
 
 function setPause(val) {
   state.isPaused = val;
   pauseOverlay.classList.toggle('visible', val);
-  if (val) audio.pause(); else audio.play().catch(()=>{});
+  if (val) gameAudio.pause(); else gameAudio.play().catch(()=>{});
 }
 
 function startGame() {
   resetState(); updateHUD();
   showScreen('screen-game');
-  if (audio.paused || audio.ended) playSelectedSong();
+  startGameMusic();
   state.running=true; state.lastTs=performance.now();
   state.animId=requestAnimationFrame(loop);
 }
 
-function startGame() {
-  resetState(); updateHUD();
-  showScreen('screen-game');
-  if (audio.paused || audio.ended) playSelectedSong();
-  state.running=true; state.lastTs=performance.now();
-  state.animId=requestAnimationFrame(loop);
-}
-
-function endGame() {
+function endGame(reason) {
+  if (!state.running) return;
   state.running=false; cancelAnimationFrame(state.animId);
-  // Save score
+  stopGameMusic();
   const acc=state.totalNotes>0?Math.round((state.hitNotes/state.totalNotes)*100):0;
   const pct=state.totalNotes>0?state.perfectNotes/state.totalNotes:0;
-  const saved=JSON.parse(localStorage.getItem('dc_scores')||'[]');
-  saved.push({name:'TÚ', score:state.score});
-  localStorage.setItem('dc_scores', JSON.stringify(saved.sort((a,b)=>b.score-a.score).slice(0,5)));
-
   let grade,title,sub;
-  if(acc>=95&&pct>0.7){grade='S';title='¡Leyenda del Norte!';sub='Los dioses cantan tu nombre.';}
+  const songFinished = reason === 'song';
+  if(songFinished){
+    grade='🏆'; title='¡Canción completada!'; sub='El público enloquece — ¡bis, bis, bis!';
+  } else if(acc>=95&&pct>0.7){grade='S';title='¡Leyenda del Norte!';sub='Los dioses cantan tu nombre.';}
   else if(acc>=85){grade='A';title='¡El drakkar surca glorioso!';sub='La tripulación vitoreó hasta las estrellas.';}
   else if(acc>=70){grade='B';title='Bien tocado, enano.';sub='El mar aplaudió tu ritmo.';}
   else if(acc>=50){grade='C';title='Aceptable, pero mejorable.';sub='Los marineros bostezaron un poco.';}
@@ -863,25 +885,60 @@ function endGame() {
   document.getElementById('over-combo').textContent='×'+state.maxCombo;
   document.getElementById('over-hits').textContent=state.hitNotes+'/'+state.totalNotes;
   document.getElementById('over-acc').textContent=acc+'%';
+  // Pre-fill name if saved
+  const inp = document.getElementById('player-name-input');
+  if(inp) inp.value = localStorage.getItem('dc_player_name') || '';
+  document.getElementById('name-input-wrap').style.display = 'flex';
   showScreen('screen-over');
+  startBgMusic();
+}
+
+async function saveScore() {
+  const inp = document.getElementById('player-name-input');
+  const name = (inp.value.trim() || 'ANÓNIMO').toUpperCase().slice(0,16);
+  const char = CHARACTERS[selectedChar];
+  localStorage.setItem('dc_player_name', name);
+
+  // Solo actualiza si es mejor puntuación
+  const existing = await sbFetch('leaderboard?name=eq.' + encodeURIComponent(name) + '&select=id,score');
+  if (existing && existing.length > 0) {
+    if (state.score > existing[0].score) {
+      await sbFetch('leaderboard?id=eq.' + existing[0].id, {
+        method: 'PATCH', prefer: 'return=minimal',
+        body: JSON.stringify({ score: state.score, instrument: char.instrument })
+      });
+    }
+  } else {
+    await sbFetch('leaderboard', {
+      method: 'POST', prefer: 'return=minimal',
+      body: JSON.stringify({ name, score: state.score, instrument: char.instrument })
+    });
+  }
+
+  // Guardar local para desbloqueo de canciones
+  const saved = JSON.parse(localStorage.getItem('dc_scores')||'[]');
+  saved.push({ name, score: state.score });
+  localStorage.setItem('dc_scores', JSON.stringify(saved.sort((a,b)=>b.score-a.score).slice(0,10)));
+
+  document.getElementById('name-input-wrap').style.display = 'none';
   buildLeaderboard();
 }
 
-// ── INJECT VOLUME CONTROLS (game + over screens only) ──
+// ── INIT ──
 document.getElementById('vol-game-wrap').innerHTML = volumeControlHTML('vol-game');
-document.getElementById('vol-over-wrap').innerHTML = volumeControlHTML('vol-over');
+document.getElementById('vol-over-wrap').innerHTML  = volumeControlHTML('vol-over');
 setupVolumeControls();
-
-// Start music immediately on first interaction (browsers require user gesture)
-let musicStarted = false;
-function ensureMusic() {
-  if (!musicStarted) { musicStarted = true; playSelectedSong(); }
-  document.removeEventListener('pointerdown', ensureMusic);
-  document.removeEventListener('keydown', ensureMusic);
-}
-document.addEventListener('pointerdown', ensureMusic);
-document.addEventListener('keydown', ensureMusic);
 setLang(currentLang);
+
+// Música de fondo arranca con el primer clic (requisito del navegador)
+let bgStarted = false;
+function tryBg() {
+  if(!bgStarted){ bgStarted=true; startBgMusic(); }
+  document.removeEventListener('pointerdown', tryBg);
+  document.removeEventListener('keydown', tryBg);
+}
+document.addEventListener('pointerdown', tryBg);
+document.addEventListener('keydown', tryBg);
 
 // ── INPUT ──
 document.addEventListener('keydown', e => {
@@ -892,10 +949,29 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('.touch-btn').forEach(btn=>{
   btn.addEventListener('pointerdown',e=>{e.preventDefault();hitLane(parseInt(btn.dataset.lane));});
 });
-document.getElementById('btn-play').addEventListener('click',startGame);
-document.getElementById('btn-retry').addEventListener('click',startGame);
-document.getElementById('btn-menu').addEventListener('click',()=>{showScreen('screen-menu');buildLeaderboard();});
-document.getElementById('btn-pause-menu').addEventListener('click',()=>{state.running=false;cancelAnimationFrame(state.animId);setPause(false);showScreen('screen-menu');buildLeaderboard();});
+
+// ── BOTONES ──
+document.getElementById('btn-play').addEventListener('click', ()=>showScreen('screen-select'));
+
+document.getElementById('btn-next-songs').addEventListener('click', ()=>{
+  document.getElementById('step-chars').style.display = 'none';
+  document.getElementById('step-songs').style.display = 'flex';
+  buildSongSelect();
+});
+
+document.getElementById('btn-back-chars').addEventListener('click', ()=>{
+  document.getElementById('step-songs').style.display = 'none';
+  document.getElementById('step-chars').style.display = 'flex';
+});
+
+document.getElementById('btn-start-game').addEventListener('click', startGame);
+document.getElementById('btn-retry').addEventListener('click', ()=>showScreen('screen-select'));
+document.getElementById('btn-menu').addEventListener('click', ()=>showScreen('screen-menu'));
+document.getElementById('btn-pause-menu').addEventListener('click', ()=>{
+  state.running=false; cancelAnimationFrame(state.animId);
+  stopGameMusic(); setPause(false);
+  showScreen('screen-menu');
+});
 </script>
 </body>
 </html>
