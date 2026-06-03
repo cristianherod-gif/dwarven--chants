@@ -35,7 +35,7 @@ body {
 ══════════════════════════════ */
 #screen-menu {
   min-height: 100vh;
-  background: url('bg_menu.png') center center / cover no-repeat;
+  background: url('Gemini_Generated_Image_phje5xphje5xphje.png') center center / cover no-repeat;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
@@ -312,44 +312,57 @@ body {
 <!-- ══ MENU ══ -->
 <div id="screen-menu" class="screen active">
 
-  <!-- Title -->
-  <div style="text-align:center;padding-top:40px;position:relative;z-index:1;">
-    <div class="game-logo">
-      <span class="title-top">DWARVEN</span>
-      <span class="title-bot">CHANTS</span>
-    </div>
-    <div class="rune-div" style="max-width:320px;margin:8px auto;"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
+  <!-- Logo top center -->
+  <div style="position:relative;z-index:1;text-align:center;padding-top:32px;">
+    <img src="Gemini_Generated_Image_66md2d66md2d66md-removebg-preview.png"
+         alt="Dwarven Chants"
+         style="max-width:min(520px,80vw);height:auto;filter:drop-shadow(0 4px 24px rgba(0,0,0,0.8));">
   </div>
 
-  <!-- Drakkar center -->
-  <div id="drakkar-wrap" style="position:relative;z-index:1;">
-    <canvas id="drakkar-canvas" width="340" height="160"></canvas>
-  </div>
-
-  <!-- Single play button -->
-  <div style="position:relative;z-index:1;margin-top:8px;">
-    <button class="mnav-btn primary" id="btn-play" style="font-size:20px;padding:18px 72px;letter-spacing:0.12em;">
-      <span class="btn-icon">⚔</span> JUGAR
+  <!-- Play button center -->
+  <div style="position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;">
+    <button class="mnav-btn primary" id="btn-play"
+      style="font-size:22px;padding:20px 80px;letter-spacing:0.14em;box-shadow:0 0 40px rgba(212,160,23,0.35),0 8px 32px rgba(0,0,0,0.7);">
+      ⚔ JUGAR
     </button>
   </div>
 
   <!-- Bottom bar -->
   <div style="position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:16px 24px;z-index:10;pointer-events:none;">
 
-    <!-- Instructions bottom-left -->
-    <div style="pointer-events:all;background:rgba(10,9,15,0.75);border:1px solid rgba(212,160,23,0.15);border-radius:6px;padding:10px 14px;">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:6px;">Controles</div>
-      <div style="font-size:13px;color:var(--iron-light);margin-bottom:6px;">Pulsa cuando la nota llegue al círculo</div>
+    <!-- Controls bottom-left -->
+    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:6px;">⚔ Controles</div>
+      <div style="font-size:12px;color:var(--iron-light);margin-bottom:7px;">Pulsa cuando la nota llegue al círculo</div>
       <div class="key-row" style="margin-top:0;justify-content:flex-start;">
         <div class="key-badge"><kbd>A</kbd><div class="ldot" style="background:var(--lane0)"></div></div>
         <div class="key-badge"><kbd>S</kbd><div class="ldot" style="background:var(--lane1)"></div></div>
         <div class="key-badge"><kbd>D</kbd><div class="ldot" style="background:var(--lane2)"></div></div>
         <div class="key-badge"><kbd>F</kbd><div class="ldot" style="background:var(--lane3)"></div></div>
       </div>
+      <div style="font-size:11px;color:var(--iron);margin-top:6px;">ESC → Pausa</div>
+    </div>
+
+    <!-- Language bottom-center -->
+    <div style="pointer-events:all;display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:4px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;">Idioma</div>
+      <div style="display:flex;gap:6px;">
+        <button id="btn-lang-es" onclick="setLang('es')"
+          style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:6px 16px;background:rgba(120,80,10,0.85);color:var(--gold-light);border:1px solid var(--gold);border-radius:3px;cursor:pointer;transition:all 0.2s;">
+          🇪🇸 ES
+        </button>
+        <button id="btn-lang-en" onclick="setLang('en')"
+          style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:6px 16px;background:rgba(30,28,42,0.85);color:var(--iron-light);border:1px solid var(--iron);border-radius:3px;cursor:pointer;transition:all 0.2s;">
+          🇬🇧 EN
+        </button>
+      </div>
     </div>
 
     <!-- Volume bottom-right -->
-    <div style="pointer-events:all;" id="vol-menu-wrap"></div>
+    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:8px;">🔊 Sonido</div>
+      <div id="vol-menu-wrap"></div>
+    </div>
 
   </div>
 
@@ -447,64 +460,26 @@ function buildLeaderboard() {
 }
 buildLeaderboard();
 
-// ── DRAKKAR MENU ANIMATION ──
-const drakkarCanvas = document.getElementById('drakkar-canvas');
-const dctx = drakkarCanvas.getContext('2d');
-let drakkarAnim;
-function drawDrakkarMenu() {
-  const W = 340, H = 160;
-  dctx.clearRect(0,0,W,H);
-  const t = Date.now();
-
-  // water
-  dctx.fillStyle = '#0E1528';
-  dctx.fillRect(0, H*0.55, W, H);
-  for (let w = 0; w < 4; w++) {
-    dctx.beginPath(); dctx.moveTo(0, H*0.6+w*8);
-    for (let x=0;x<=W;x+=10) dctx.lineTo(x, H*0.6+w*8+Math.sin((x/50)+(t/700)+w)*3);
-    dctx.strokeStyle=`rgba(29,158,117,${0.15-w*0.03})`; dctx.lineWidth=1.5; dctx.stroke();
-  }
-
-  // hull
-  const cy = H*0.72, cx = W/2;
-  const bob = Math.sin(t/1000)*3;
-  dctx.fillStyle='#4A2C0A';
-  dctx.beginPath(); dctx.moveTo(cx-110,cy+bob); dctx.quadraticCurveTo(cx-120,cy+18+bob,cx,cy+22+bob); dctx.quadraticCurveTo(cx+120,cy+18+bob,cx+110,cy+bob); dctx.closePath(); dctx.fill();
-  dctx.strokeStyle='#6B3D0F'; dctx.lineWidth=1.5; dctx.stroke();
-
-  // dragon head
-  dctx.fillStyle='#6B3D0F';
-  dctx.beginPath(); dctx.moveTo(cx+110,cy+bob); dctx.quadraticCurveTo(cx+130,cy-10+bob,cx+125,cy-20+bob); dctx.quadraticCurveTo(cx+118,cy-14+bob,cx+110,cy+bob); dctx.fill();
-
-  // mast
-  dctx.strokeStyle='#6B3D0F'; dctx.lineWidth=3;
-  dctx.beginPath(); dctx.moveTo(cx-10,cy+bob); dctx.lineTo(cx-10,cy-80+bob); dctx.stroke();
-
-  // sail
-  const sw = Math.sin(t/900)*5;
-  dctx.fillStyle='rgba(80,50,120,0.85)';
-  dctx.beginPath(); dctx.moveTo(cx-10,cy-72+bob); dctx.quadraticCurveTo(cx+50+sw,cy-55+bob,cx+48+sw,cy-10+bob); dctx.lineTo(cx-10,cy-10+bob); dctx.closePath(); dctx.fill();
-  dctx.strokeStyle='#3A2060'; dctx.lineWidth=1; dctx.stroke();
-  // rune on sail
-  dctx.fillStyle='rgba(212,160,23,0.7)'; dctx.font='bold 14px serif'; dctx.textAlign='center'; dctx.textBaseline='middle';
-  dctx.fillText('✦', cx+22+sw*0.4, cy-40+bob);
-
-  // lanterns
-  for (let s of [-1,1]) {
-    const lx = cx + s*80, ly = cy-15+bob + Math.sin(t/600+s)*2;
-    dctx.strokeStyle='#8B6914'; dctx.lineWidth=1;
-    dctx.beginPath(); dctx.moveTo(lx,cy-5+bob); dctx.lineTo(lx,ly); dctx.stroke();
-    dctx.fillStyle='rgba(200,120,20,0.9)';
-    dctx.beginPath(); dctx.rect(lx-4,ly,8,10); dctx.fill();
-    // glow
-    const lg=dctx.createRadialGradient(lx,ly+5,0,lx,ly+5,18);
-    lg.addColorStop(0,'rgba(255,180,40,0.25)'); lg.addColorStop(1,'transparent');
-    dctx.fillStyle=lg; dctx.beginPath(); dctx.arc(lx,ly+5,18,0,Math.PI*2); dctx.fill();
-  }
-
-  drakkarAnim = requestAnimationFrame(drawDrakkarMenu);
+// ── LANGUAGE ──
+const TEXTS = {
+  es: { play:'⚔ JUGAR', controls:'⚔ Controles', hint:'Pulsa cuando la nota llegue al círculo', pause:'ESC → Pausa', sound:'🔊 Sonido', perfect:'✦ PERFECTO', good:'¡Bien!', early:'Demasiado pronto', miss:'Fallado' },
+  en: { play:'⚔ PLAY',  controls:'⚔ Controls',  hint:'Hit when the note reaches the circle',   pause:'ESC → Pause', sound:'🔊 Sound',  perfect:'✦ PERFECT',  good:'Good!',  early:'Too early',    miss:'Missed'  },
+};
+let currentLang = localStorage.getItem('dc_lang') || 'es';
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('dc_lang', lang);
+  const btnPlay = document.getElementById('btn-play');
+  if (btnPlay) btnPlay.textContent = TEXTS[lang].play;
+  ['es','en'].forEach(l => {
+    const b = document.getElementById('btn-lang-'+l);
+    if (!b) return;
+    b.style.background = l===lang ? 'rgba(120,80,10,0.85)' : 'rgba(30,28,42,0.85)';
+    b.style.color = l===lang ? 'var(--gold-light)' : 'var(--iron-light)';
+    b.style.borderColor = l===lang ? 'var(--gold)' : 'var(--iron)';
+  });
 }
-drawDrakkarMenu();
+function T(key) { return (TEXTS[currentLang]||TEXTS.es)[key] || TEXTS.es[key]; }
 
 // ── AUDIO ──
 let audio = new Audio();
@@ -579,8 +554,7 @@ function setupVolumeControls() {
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'screen-menu') { drawDrakkarMenu(); updateSongList(); }
-  else cancelAnimationFrame(drakkarAnim);
+  if (id === 'screen-menu') { setLang(currentLang); updateSongList(); }
   setupVolumeControls();
 }
 
@@ -871,6 +845,7 @@ function ensureMusic() {
 }
 document.addEventListener('pointerdown', ensureMusic);
 document.addEventListener('keydown', ensureMusic);
+setLang(currentLang);
 
 // ── INPUT ──
 document.addEventListener('keydown', e => {
