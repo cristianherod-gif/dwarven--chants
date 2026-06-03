@@ -314,52 +314,48 @@ body {
 
 <!-- ══ MENU ══ -->
 <div id="screen-menu" class="screen active">
-  <!-- Left: dwarf illustration area -->
-  <div class="menu-left">
-    <div class="news-box">
-      <div class="news-label">⚔ Novedades</div>
-      <div class="news-text" id="news-text">¡Bienvenido a Dwarven Chants! Toca las runas al ritmo de la forja.</div>
-    </div>
-    <div style="font-size:13px;color:var(--iron-light);font-style:italic;text-align:center;">
-      Usa <strong style="color:var(--gold)">A S D F</strong> o los botones táctiles
-    </div>
-    <div class="key-row" style="margin-top:10px;">
-      <div class="key-badge"><kbd>A</kbd><div class="ldot" style="background:var(--lane0)"></div></div>
-      <div class="key-badge"><kbd>S</kbd><div class="ldot" style="background:var(--lane1)"></div></div>
-      <div class="key-badge"><kbd>D</kbd><div class="ldot" style="background:var(--lane2)"></div></div>
-      <div class="key-badge"><kbd>F</kbd><div class="ldot" style="background:var(--lane3)"></div></div>
-    </div>
-  </div>
 
-  <!-- Center -->
-  <div class="menu-center">
+  <!-- Title -->
+  <div style="text-align:center;padding-top:40px;position:relative;z-index:1;">
     <div class="game-logo">
       <span class="title-top">DWARVEN</span>
       <span class="title-bot">CHANTS</span>
     </div>
-    <div class="rune-div"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
-
-    <div id="drakkar-wrap">
-      <canvas id="drakkar-canvas" width="340" height="160"></canvas>
-    </div>
-
-    <div class="rune-div"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
-
-    <div class="menu-nav">
-      <button class="mnav-btn primary" id="btn-play"><span class="btn-icon">⚔</span> Iniciar Aventura</button>
-      <button class="mnav-btn" id="btn-songs"><span class="btn-icon">♪</span> Seleccionar Canción</button>
-      <div id="song-list" style="display:none;width:100%;margin-top:4px;"></div>
-      <div style="margin-top:8px;" id="vol-menu-wrap"></div>
-    </div>
+    <div class="rune-div" style="max-width:320px;margin:8px auto;"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
   </div>
 
-  <!-- Right: leaderboard -->
-  <div class="menu-right">
-    <div class="lb-box">
-      <div class="lb-title">⚜ Leaderboard</div>
-      <div id="lb-rows"></div>
-    </div>
+  <!-- Drakkar center -->
+  <div id="drakkar-wrap" style="position:relative;z-index:1;">
+    <canvas id="drakkar-canvas" width="340" height="160"></canvas>
   </div>
+
+  <!-- Single play button -->
+  <div style="position:relative;z-index:1;margin-top:8px;">
+    <button class="mnav-btn primary" id="btn-play" style="font-size:20px;padding:18px 72px;letter-spacing:0.12em;">
+      <span class="btn-icon">⚔</span> JUGAR
+    </button>
+  </div>
+
+  <!-- Bottom bar -->
+  <div style="position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:16px 24px;z-index:10;pointer-events:none;">
+
+    <!-- Instructions bottom-left -->
+    <div style="pointer-events:all;background:rgba(10,9,15,0.75);border:1px solid rgba(212,160,23,0.15);border-radius:6px;padding:10px 14px;">
+      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:6px;">Controles</div>
+      <div style="font-size:13px;color:var(--iron-light);margin-bottom:6px;">Pulsa cuando la nota llegue al círculo</div>
+      <div class="key-row" style="margin-top:0;justify-content:flex-start;">
+        <div class="key-badge"><kbd>A</kbd><div class="ldot" style="background:var(--lane0)"></div></div>
+        <div class="key-badge"><kbd>S</kbd><div class="ldot" style="background:var(--lane1)"></div></div>
+        <div class="key-badge"><kbd>D</kbd><div class="ldot" style="background:var(--lane2)"></div></div>
+        <div class="key-badge"><kbd>F</kbd><div class="ldot" style="background:var(--lane3)"></div></div>
+      </div>
+    </div>
+
+    <!-- Volume bottom-right -->
+    <div style="pointer-events:all;" id="vol-menu-wrap"></div>
+
+  </div>
+
 </div>
 
 <!-- ══ GAME ══ -->
@@ -613,10 +609,6 @@ function updateSongList() {
   });
 }
 
-document.getElementById('btn-songs').addEventListener('click', () => {
-  const list = document.getElementById('song-list');
-  list.style.display = list.style.display === 'none' ? 'block' : 'none';
-});
 
 // ── GAME CONSTANTS ──
 const canvas = document.getElementById('gc');
