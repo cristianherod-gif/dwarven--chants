@@ -35,35 +35,32 @@ body {
 ══════════════════════════════ */
 #screen-menu {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(200,75,17,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(29,158,117,0.08) 0%, transparent 50%),
-    linear-gradient(180deg, #0A090F 0%, #13111C 40%, #0E0C18 100%);
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: center;
+  background: url('bg_menu.png') center center / cover no-repeat;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   padding: 0;
   position: relative;
   overflow: hidden;
 }
 
-/* Stars */
-#screen-menu::before {
+/* Dark overlay so text is readable */
+#screen-menu::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 8%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 60% 5%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 75% 18%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 88% 10%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 92% 30%, rgba(255,255,255,0.5) 0%, transparent 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.2) 40%,
+    rgba(0,0,0,0.15) 60%,
+    rgba(0,0,0,0.65) 100%
+  );
   pointer-events: none;
   z-index: 0;
 }
+
+/* Stars removed — real background image used */
 
 .menu-left {
   flex: 1;
