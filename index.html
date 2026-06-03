@@ -515,7 +515,7 @@ drawDrakkarMenu();
 
 // ── AUDIO ──
 let audio = new Audio();
-let selectedSong = 0;
+let selectedSong = 1; // The Mountain por defecto en el menú
 let globalVolume = 0.75;
 let globalMuted = false;
 
@@ -824,6 +824,8 @@ function setPause(val) {
   pauseOverlay.classList.toggle('visible', val);
   if (val) audio.pause(); else audio.play().catch(()=>{});
 }
+
+function startGame() {
   resetState(); updateHUD();
   showScreen('screen-game');
   if (audio.paused || audio.ended) playSelectedSong();
@@ -871,13 +873,15 @@ document.getElementById('vol-game-wrap').innerHTML = volumeControlHTML('vol-game
 document.getElementById('vol-over-wrap').innerHTML = volumeControlHTML('vol-over');
 setupVolumeControls();
 
-// Start music on first interaction
+// Start music immediately on first interaction (browsers require user gesture)
 let musicStarted = false;
 function ensureMusic() {
   if (!musicStarted) { musicStarted = true; playSelectedSong(); }
+  document.removeEventListener('pointerdown', ensureMusic);
+  document.removeEventListener('keydown', ensureMusic);
 }
-document.addEventListener('pointerdown', ensureMusic, { once: true });
-document.addEventListener('keydown', ensureMusic, { once: true });
+document.addEventListener('pointerdown', ensureMusic);
+document.addEventListener('keydown', ensureMusic);
 
 // ── INPUT ──
 document.addEventListener('keydown', e => {
