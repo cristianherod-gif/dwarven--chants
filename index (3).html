@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dwarven Chants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A017; --gold-light: #F0C040; --gold-dark: #8B6914;
+    --iron: #4A4A5A; --iron-light: #7A7A8A;
+    --stone: #2A2A35; --stone-dark: #18181F; --stone-deeper: #0E0E14;
+    --ember: #C84B11; --ember-light: #E8622A;
+    --teal: #1D9E75; --teal-light: #5DCAA5;
+    --lane0: #5DCAA5; --lane1: #85B7EB; --lane2: #F0997B; --lane3: #FAC775;
+    --lane0d: #0F6E56; --lane1d: #185FA5; --lane2d: #993C1D; --lane3d: #854F0B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--stone-deeper); color: #E8E0D0; font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(200,75,17,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(212,160,23,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 90%, rgba(29,158,117,0.05) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+  #app { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+  .screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+  .screen.active { display: flex; }
+
+  /* MENU */
+  #screen-menu { padding: 48px 20px 40px; gap: 0; }
+  .rune-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; width: 100%; max-width: 480px; }
+  .rune-divider::before, .rune-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dark), transparent); }
+  .rune-divider span { color: var(--gold); font-size: 18px; letter-spacing: 6px; }
+  .game-title { font-family: 'Cinzel', serif; font-size: clamp(40px, 8vw, 72px); font-weight: 900; color: var(--gold-light); text-align: center; letter-spacing: 0.05em; line-height: 1; text-shadow: 0 0 40px rgba(212,160,23,0.4), 0 2px 0 var(--gold-dark); margin-bottom: 4px; }
+  .game-subtitle { font-family: 'Crimson Text', serif; font-size: 18px; color: var(--iron-light); letter-spacing: 0.15em; text-transform: uppercase; text-align: center; }
+  .dwarf-ascii { font-size: clamp(60px, 12vw, 100px); margin: 24px 0 8px; filter: drop-shadow(0 0 20px rgba(212,160,23,0.3)); animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .menu-btn { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; letter-spacing: 0.08em; padding: 14px 52px; background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-dark) 100%); color: var(--stone-deeper); border: 2px solid var(--gold-light); border-radius: 4px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; margin-top: 8px; position: relative; overflow: hidden; }
+  .menu-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,160,23,0.4); }
+  .menu-btn:active { transform: scale(0.98); }
+  .menu-btn.secondary { background: var(--stone); color: var(--gold); border-color: var(--gold-dark); }
+
+  /* SONG LIST */
+  #song-list { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 440px; margin: 16px 0; }
+  .song-card {
+    background: var(--stone); border: 1px solid var(--iron); border-radius: 6px;
+    padding: 14px 18px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .song-card:hover { border-color: var(--gold-dark); background: #32323F; transform: translateX(4px); }
+  .song-card.selected { border-color: var(--gold); background: #2E2A18; }
+  .song-icon { font-size: 28px; }
+  .song-info { flex: 1; }
+  .song-name { font-family: 'Cinzel', serif; font-size: 15px; color: var(--gold-light); }
+  .song-file { font-size: 13px; color: var(--iron-light); margin-top: 2px; font-style: italic; }
+  .song-check { font-size: 20px; color: var(--gold); opacity: 0; transition: opacity 0.2s; }
+  .song-card.selected .song-check { opacity: 1; }
+
+  .instructions { max-width: 440px; text-align: center; margin-top: 16px; }
+  .instructions p { font-size: 16px; line-height: 1.7; color: var(--iron-light); }
+  .key-row { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
+  .key-badge { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .key-badge kbd { display: inline-block; width: 44px; height: 44px; line-height: 42px; text-align: center; font-family: 'Cinzel', serif; font-size: 16px; font-weight: 700; background: var(--stone); border: 1.5px solid var(--iron); border-bottom: 3px solid var(--iron-light); border-radius: 6px; color: #E8E0D0; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+  .key-badge .lane-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* GAME */
+  #screen-game { padding: 0; align-items: center; }
+  #game-header { width: 100%; max-width: 640px; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px 8px; }
+  .stat-block { text-align: center; min-width: 80px; }
+  .stat-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dark); }
+  .stat-value { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--gold-light); line-height: 1.1; }
+  #morale-wrap { flex: 1; max-width: 240px; margin: 0 16px; }
+  #morale-label-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  #morale-track { height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; border: 0.5px solid rgba(255,255,255,0.1); overflow: hidden; }
+  #morale-fill { height: 100%; border-radius: 4px; background: var(--teal); transition: width 0.35s ease, background 0.5s ease; width: 70%; }
+  #song-title-bar { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.1em; color: var(--gold-dark); text-align: center; padding: 0 20px 6px; text-transform: uppercase; max-width: 640px; width: 100%; }
+  #canvas-container { position: relative; width: min(600px, 100vw); }
+  #gc { display: block; width: 100%; height: auto; }
+  #feedback-popup { position: absolute; top: 80px; left: 50%; transform: translateX(-50%); font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; letter-spacing: 0.08em; pointer-events: none; opacity: 0; transition: opacity 0.1s; text-shadow: 0 2px 12px rgba(0,0,0,0.8); white-space: nowrap; }
+  #touch-buttons { display: flex; width: min(600px, 100vw); gap: 0; margin-top: 2px; }
+  .touch-btn { flex: 1; height: 56px; border: none; cursor: pointer; font-family: 'Cinzel', serif; font-size: 16px; font-weight: 700; color: var(--stone-deeper); transition: filter 0.1s, transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0.88; }
+  .touch-btn:first-child { border-radius: 0 0 0 8px; }
+  .touch-btn:last-child  { border-radius: 0 0 8px 0; }
+  .touch-btn:active, .touch-btn.pressed { filter: brightness(1.3); transform: scaleY(0.95); }
+
+  /* GAME OVER */
+  #screen-over { padding: 60px 20px; gap: 16px; text-align: center; }
+  .over-title { font-family: 'Cinzel', serif; font-size: 36px; font-weight: 900; color: var(--ember-light); text-shadow: 0 0 30px rgba(200,75,17,0.5); }
+  .over-sub { font-size: 18px; color: var(--iron-light); font-style: italic; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 320px; width: 100%; margin: 8px 0; }
+  .result-card { background: var(--stone); border: 1px solid var(--iron); border-radius: 6px; padding: 12px; }
+  .result-card .rc-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.1em; color: var(--gold-dark); text-transform: uppercase; }
+  .result-card .rc-value { font-family: 'Cinzel', serif; font-size: 26px; font-weight: 700; color: var(--gold-light); }
+  .grade-badge { font-family: 'Cinzel', serif; font-size: 64px; font-weight: 900; color: var(--gold-light); text-shadow: 0 0 40px rgba(212,160,23,0.5); line-height: 1; }
+
+  /* AUDIO STATUS */
+  #audio-status { font-family: 'Cinzel', serif; font-size: 11px; color: var(--iron-light); text-align: center; padding: 4px; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- MENU -->
+  <div id="screen-menu" class="screen active">
+    <div class="rune-divider"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
+    <h1 class="game-title">Dwarven<br>Chants</h1>
+    <p class="game-subtitle">Rhythm of the Deep Forge</p>
+    <div class="dwarf-ascii">⛏️</div>
+    <div class="rune-divider"><span>ᚦ ᚢ ᚱ ᚾ</span></div>
+
+    <div id="song-list">
+      <!-- Las canciones se generan desde SONGS array abajo -->
+    </div>
+
+    <button class="menu-btn" id="btn-play">⚔ Comenzar</button>
+
+    <div class="instructions">
+      <p>Toca las notas cuando lleguen al círculo.<br>Mantén la moral de la tripulación alta.</p>
+      <div class="key-row">
+        <div class="key-badge"><kbd>A</kbd><div class="lane-dot" style="background:var(--lane0)"></div></div>
+        <div class="key-badge"><kbd>S</kbd><div class="lane-dot" style="background:var(--lane1)"></div></div>
+        <div class="key-badge"><kbd>D</kbd><div class="lane-dot" style="background:var(--lane2)"></div></div>
+        <div class="key-badge"><kbd>F</kbd><div class="lane-dot" style="background:var(--lane3)"></div></div>
+      </div>
+      <p style="margin-top:12px;font-size:14px;color:var(--iron)">En móvil usa los botones de la parte inferior.</p>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="screen-game" class="screen">
+    <div id="game-header">
+      <div class="stat-block">
+        <div class="stat-label">Puntos</div>
+        <div class="stat-value" id="hud-score">0</div>
+      </div>
+      <div id="morale-wrap">
+        <div id="morale-label-row">
+          <span class="stat-label">Moral</span>
+          <span class="stat-label" id="hud-morale-pct">70%</span>
+        </div>
+        <div id="morale-track"><div id="morale-fill"></div></div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Combo</div>
+        <div class="stat-value" id="hud-combo">×1</div>
+      </div>
+    </div>
+    <div id="song-title-bar">⚓ Navegando las aguas del Norte</div>
+    <div id="audio-status"></div>
+
+    <div id="canvas-container">
+      <canvas id="gc" width="600" height="420"></canvas>
+      <div id="feedback-popup"></div>
+    </div>
+
+    <div id="touch-buttons">
+      <button class="touch-btn" data-lane="0" style="background:var(--lane0)">ᚦ A</button>
+      <button class="touch-btn" data-lane="1" style="background:var(--lane1)">ᚢ S</button>
+      <button class="touch-btn" data-lane="2" style="background:var(--lane2)">ᚱ D</button>
+      <button class="touch-btn" data-lane="3" style="background:var(--lane3)">ᚾ F</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div id="screen-over" class="screen">
+    <div class="grade-badge" id="over-grade">C</div>
+    <div class="over-title" id="over-title">La tripulación se rinde</div>
+    <div class="over-sub" id="over-sub">El drakkar pierde el rumbo...</div>
+    <div class="rune-divider" style="max-width:320px"><span>ᚦ ᚢ ᚱ</span></div>
+    <div class="result-grid">
+      <div class="result-card"><div class="rc-label">Puntuación</div><div class="rc-value" id="over-score">0</div></div>
+      <div class="result-card"><div class="rc-label">Combo máx.</div><div class="rc-value" id="over-combo">0</div></div>
+      <div class="result-card"><div class="rc-label">Notas</div><div class="rc-value" id="over-hits">0</div></div>
+      <div class="result-card"><div class="rc-label">Precisión</div><div class="rc-value" id="over-acc">0%</div></div>
+    </div>
+    <button class="menu-btn" id="btn-retry">↺ Otra vez</button>
+    <button class="menu-btn secondary" id="btn-menu" style="margin-top:8px">⬅ Menú</button>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  🎵 CANCIONES — EDITA AQUÍ
+//  Para añadir una canción:
+//  1. Pon el archivo MP3 en la misma carpeta que este index.html
+//  2. Añade una entrada al array con el nombre del archivo y el título
+// ═══════════════════════════════════════════
+const SONGS = [
+  {
+    file: 'stormforge_oar_song.mp3',
+    title: 'Stormforge Oar Song',
+    icon: '⚓'
+  },
+  // Para añadir más canciones, copia el bloque de arriba y cambia los datos:
+  // {
+  //   file: 'cancion2.mp3',
+  //   title: 'Mi segunda canción',
+  //   icon: '⚔️'
+  // },
+];
+// ═══════════════════════════════════════════
+
+// ── AUDIO ──
+let audio = new Audio();
+let selectedSong = 0;
+
+function buildSongList() {
+  const list = document.getElementById('song-list');
+  list.innerHTML = '';
+  if (SONGS.length === 0) return;
+  SONGS.forEach((song, i) => {
+    const card = document.createElement('div');
+    card.className = 'song-card' + (i === 0 ? ' selected' : '');
+    card.innerHTML = `
+      <span class="song-icon">${song.icon}</span>
+      <div class="song-info">
+        <div class="song-name">${song.title}</div>
+        <div class="song-file">${song.file}</div>
+      </div>
+      <span class="song-check">✦</span>
+    `;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.song-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedSong = i;
+    });
+    list.appendChild(card);
+  });
+}
+buildSongList();
+
+function playSelectedSong() {
+  if (SONGS.length === 0) return;
+  const song = SONGS[selectedSong];
+  const statusEl = document.getElementById('audio-status');
+  try {
+    audio.pause();
+    audio = new Audio();
+    audio.loop = true;
+    audio.volume = 0.75;
+    audio.preload = 'auto';
+    audio.onerror = () => { statusEl.textContent = '⚠ No se encontró: ' + song.file; };
+    audio.oncanplaythrough = () => {
+      audio.play().catch(e => { statusEl.textContent = '⚠ Error: ' + e.message; });
+    };
+    audio.addEventListener('playing', () => { statusEl.textContent = '♪ ' + song.title; });
+    audio.src = song.file;
+    audio.load();
+    statusEl.textContent = '⏳ Cargando ' + song.title + '...';
+    document.getElementById('song-title-bar').textContent = '♪ ' + song.title;
+  } catch(e) {
+    statusEl.textContent = '⚠ Error de audio: ' + e.message;
+  }
+}
+
+function stopAudio() {
+  audio.pause();
+  audio.currentTime = 0;
+}
+
+// ── GAME CONSTANTS ──
+const canvas = document.getElementById('gc');
+const ctx = canvas.getContext('2d');
+const W = 600, H = 420;
+const LANE_COLORS = ['#5DCAA5','#85B7EB','#F0997B','#FAC775'];
+const LANE_DARKS  = ['#0F6E56','#185FA5','#993C1D','#854F0B'];
+const RUNES       = ['ᚦ','ᚢ','ᚱ','ᚾ'];
+const KEYS        = ['a','s','d','f'];
+const NUM_LANES   = 4;
+const LANE_W      = W / NUM_LANES;
+const HIT_Y       = H - 72;
+const HIT_R       = 24;
+const NOTE_R      = 20;
+const NOTE_SPEED  = 3.5;
+const PERF_WIN    = 30;
+const GOOD_WIN    = 58;
+
+let state = {};
+
+function resetState() {
+  state = {
+    notes: [], score: 0, combo: 0, maxCombo: 0, morale: 70,
+    totalNotes: 0, hitNotes: 0, perfectNotes: 0,
+    running: false, lastSpawn: 0, elapsed: 0,
+    spawnAccel: 1, pressedLanes: [false,false,false,false],
+    feedbackTimer: null, animId: null, lastTs: 0,
+    waveOffset: 0, particles: [],
+  };
+}
+
+// ── HUD ──
+const hudScore   = document.getElementById('hud-score');
+const hudCombo   = document.getElementById('hud-combo');
+const moraleFill = document.getElementById('morale-fill');
+const moralePct  = document.getElementById('hud-morale-pct');
+const feedbackEl = document.getElementById('feedback-popup');
+
+function updateHUD() {
+  hudScore.textContent = state.score.toLocaleString();
+  const c = state.combo;
+  hudCombo.textContent = '×' + (c > 1 ? c : '1');
+  hudCombo.style.color = c >= 10 ? '#FAC775' : c >= 5 ? '#5DCAA5' : '#888';
+  moraleFill.style.width = state.morale + '%';
+  moralePct.textContent = Math.round(state.morale) + '%';
+  moraleFill.style.background = state.morale > 60 ? '#1D9E75' : state.morale > 30 ? '#EF9F27' : '#E24B4A';
+}
+
+function showFeedback(text, color) {
+  feedbackEl.textContent = text;
+  feedbackEl.style.color = color;
+  feedbackEl.style.opacity = '1';
+  if (state.feedbackTimer) clearTimeout(state.feedbackTimer);
+  state.feedbackTimer = setTimeout(() => { feedbackEl.style.opacity = '0'; }, 500);
+}
+
+// ── PARTICLES ──
+function spawnParticles(cx, cy, color) {
+  for (let i = 0; i < 8; i++) {
+    const angle = (Math.PI * 2 / 8) * i;
+    const speed = 2 + Math.random() * 3;
+    state.particles.push({ x: cx, y: cy, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, alpha: 1, color, r: 3 + Math.random()*3 });
+  }
+}
+
+// ── HIT LOGIC ──
+function hitLane(lane) {
+  if (!state.running) return;
+  state.pressedLanes[lane] = true;
+  setTimeout(() => state.pressedLanes[lane] = false, 130);
+  const btn = document.querySelector(`.touch-btn[data-lane="${lane}"]`);
+  if (btn) { btn.classList.add('pressed'); setTimeout(() => btn.classList.remove('pressed'), 130); }
+
+  const laneNotes = state.notes.filter(n => n.lane === lane && !n.hit && !n.miss);
+  if (!laneNotes.length) { state.combo = 0; updateHUD(); return; }
+  laneNotes.sort((a,b) => Math.abs(a.y - HIT_Y) - Math.abs(b.y - HIT_Y));
+  const n = laneNotes[0];
+  const dist = Math.abs(n.y - HIT_Y);
+  const cx = lane * LANE_W + LANE_W / 2;
+
+  if (dist <= PERF_WIN) {
+    n.hit = true; state.combo++; state.maxCombo = Math.max(state.combo, state.maxCombo);
+    state.hitNotes++; state.perfectNotes++;
+    state.score += 150 * Math.min(state.combo, 10);
+    state.morale = Math.min(100, state.morale + 2.5);
+    spawnParticles(cx, HIT_Y, LANE_COLORS[lane]);
+    showFeedback('✦ PERFECTO', '#FAC775');
+  } else if (dist <= GOOD_WIN) {
+    n.hit = true; state.combo++; state.maxCombo = Math.max(state.combo, state.maxCombo);
+    state.hitNotes++;
+    state.score += 80 * Math.min(state.combo, 10);
+    state.morale = Math.min(100, state.morale + 1);
+    spawnParticles(cx, HIT_Y, LANE_COLORS[lane]);
+    showFeedback('¡Bien!', '#5DCAA5');
+  } else {
+    state.combo = 0;
+    showFeedback('Demasiado pronto', '#F0997B');
+  }
+  updateHUD();
+}
+
+// ── DRAW ──
+function drawBG() {
+  ctx.fillStyle = '#18181F';
+  ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < NUM_LANES; i++) {
+    ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.1)';
+    ctx.fillRect(i * LANE_W, 0, LANE_W, H - 90);
+  }
+  for (let i = 1; i < NUM_LANES; i++) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(i*LANE_W, 0); ctx.lineTo(i*LANE_W, H-90); ctx.stroke();
+  }
+  ctx.save();
+  ctx.strokeStyle = 'rgba(212,160,23,0.2)'; ctx.lineWidth = 1;
+  ctx.setLineDash([8,8]); ctx.lineDashOffset = -(Date.now()/60) % 16;
+  ctx.beginPath(); ctx.moveTo(0, HIT_Y); ctx.lineTo(W, HIT_Y); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+  ctx.fillStyle = '#0E1528'; ctx.fillRect(0, H-90, W, 90);
+  state.waveOffset += 0.4;
+  for (let w = 0; w < 3; w++) {
+    ctx.beginPath(); ctx.moveTo(0, H-60+w*10);
+    for (let x = 0; x <= W; x += 8) ctx.lineTo(x, H-60+w*10 + Math.sin((x/55)+state.waveOffset*0.03*(w+1))*4);
+    ctx.strokeStyle = `rgba(29,158,117,${0.12-w*0.03})`; ctx.lineWidth = 1.5; ctx.stroke();
+  }
+}
+
+function drawShip() {
+  const cy = H - 20, cx = W/2;
+  ctx.fillStyle = '#4A2C0A';
+  ctx.beginPath(); ctx.moveTo(cx-120,cy); ctx.quadraticCurveTo(cx-130,cy+18,cx,cy+22); ctx.quadraticCurveTo(cx+130,cy+18,cx+120,cy); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#6B3D0F'; ctx.lineWidth = 1.5; ctx.stroke();
+  for (let side = -1; side <= 1; side += 2) {
+    for (let i = 0; i < 3; i++) {
+      const ox = cx + side*(40+i*26);
+      ctx.fillStyle = '#331E06'; ctx.beginPath(); ctx.ellipse(ox,cy+8,4,6,0,0,Math.PI*2); ctx.fill();
+    }
+  }
+  ctx.strokeStyle = '#6B3D0F'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx,cy-2); ctx.lineTo(cx,cy-80); ctx.stroke();
+  const sw = Math.sin(Date.now()/800)*6;
+  ctx.fillStyle = 'rgba(200,160,80,0.9)';
+  ctx.beginPath(); ctx.moveTo(cx,cy-70); ctx.quadraticCurveTo(cx+55+sw,cy-50,cx+50+sw,cy-20); ctx.lineTo(cx,cy-20); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#8B6914'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = '#4A2C0A'; ctx.font = 'bold 16px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('ᚦ', cx+28+sw*0.5, cy-44);
+
+  const dx = cx-60, bobY = Math.sin(Date.now()/500)*2;
+  ctx.fillStyle='#666'; ctx.fillRect(dx-8,cy-30+bobY,16,20);
+  ctx.fillStyle='#D4A890'; ctx.beginPath(); ctx.arc(dx,cy-38+bobY,10,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#888'; ctx.beginPath(); ctx.arc(dx,cy-43+bobY,10,Math.PI,0); ctx.fill();
+  ctx.strokeStyle='#D3D1C7'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(dx-9,cy-46+bobY); ctx.lineTo(dx-16,cy-56+bobY); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dx+9,cy-46+bobY); ctx.lineTo(dx+16,cy-56+bobY); ctx.stroke();
+  ctx.fillStyle='#A89070'; ctx.beginPath(); ctx.moveTo(dx-7,cy-30+bobY); ctx.lineTo(dx-9,cy-16+bobY); ctx.lineTo(dx+9,cy-16+bobY); ctx.lineTo(dx+7,cy-30+bobY); ctx.fill();
+  ctx.fillStyle='#BA7517'; ctx.beginPath(); ctx.ellipse(dx+20,cy-20+bobY,7,10,0.4,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#412402'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(dx+24,cy-28+bobY); ctx.lineTo(dx+28,cy-36+bobY); ctx.stroke();
+
+  [cx+30,cx+65,cx+95].forEach((crx,idx) => {
+    const cb = Math.sin(Date.now()/450+idx)*2;
+    ctx.fillStyle='#555'; ctx.fillRect(crx-5,cy-26+cb,10,16);
+    ctx.fillStyle='#D4A890'; ctx.beginPath(); ctx.arc(crx,cy-32+cb,7,0,Math.PI*2); ctx.fill();
+    if (state.morale > 45) {
+      ctx.strokeStyle='#555'; ctx.lineWidth=2;
+      const ar = Math.sin(Date.now()/300+idx*1.2)*8;
+      ctx.beginPath(); ctx.moveTo(crx-5,cy-22+cb); ctx.lineTo(crx-14,cy-30+cb+ar); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(crx+5,cy-22+cb); ctx.lineTo(crx+14,cy-30+cb-ar); ctx.stroke();
+    }
+  });
+}
+
+function drawHitZones() {
+  for (let i = 0; i < NUM_LANES; i++) {
+    const cx = i*LANE_W + LANE_W/2;
+    if (state.pressedLanes[i]) {
+      ctx.beginPath(); ctx.arc(cx,HIT_Y,HIT_R+10,0,Math.PI*2);
+      ctx.fillStyle = LANE_COLORS[i]+'33'; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(cx,HIT_Y,HIT_R,0,Math.PI*2);
+    ctx.fillStyle = state.pressedLanes[i] ? LANE_COLORS[i]+'BB' : 'rgba(255,255,255,0.05)'; ctx.fill();
+    ctx.strokeStyle = LANE_COLORS[i]+(state.pressedLanes[i]?'FF':'66'); ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle = state.pressedLanes[i] ? LANE_DARKS[i] : LANE_COLORS[i]+'99';
+    ctx.font = `bold ${state.pressedLanes[i]?17:14}px serif`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(RUNES[i], cx, HIT_Y);
+  }
+}
+
+function drawNotes() {
+  for (const n of state.notes) {
+    if (n.miss && n.alpha <= 0) continue;
+    const cx = n.lane*LANE_W + LANE_W/2;
+    ctx.globalAlpha = n.alpha;
+    const g = ctx.createRadialGradient(cx,n.y,0,cx,n.y,NOTE_R*2.2);
+    g.addColorStop(0, LANE_COLORS[n.lane]+'66'); g.addColorStop(1,'transparent');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,n.y,NOTE_R*2.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = n.hit?'#fff':LANE_COLORS[n.lane];
+    ctx.beginPath(); ctx.arc(cx,n.y,NOTE_R,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle=LANE_DARKS[n.lane]; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle=LANE_DARKS[n.lane]; ctx.font='bold 14px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(RUNES[n.lane], cx, n.y);
+    ctx.globalAlpha=1;
+  }
+}
+
+function drawParticles() {
+  for (const p of state.particles) {
+    ctx.globalAlpha=p.alpha; ctx.fillStyle=p.color;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha=1;
+}
+
+// ── LOOP ──
+function loop(ts) {
+  if (!state.running) return;
+  state.elapsed += ts - state.lastTs;
+  state.lastTs = ts;
+  ctx.clearRect(0,0,W,H);
+  drawBG(); drawHitZones(); drawNotes(); drawParticles(); drawShip();
+
+  state.spawnAccel = Math.min(1.9, 1 + state.elapsed/60000);
+  if (ts - state.lastSpawn > 960/state.spawnAccel) {
+    state.notes.push({ lane: Math.floor(Math.random()*NUM_LANES), y: -NOTE_R, hit:false, miss:false, alpha:1 });
+    state.totalNotes++;
+    if (Math.random() < 0.2) {
+      state.notes.push({ lane: Math.floor(Math.random()*NUM_LANES), y: -NOTE_R, hit:false, miss:false, alpha:1 });
+      state.totalNotes++;
+    }
+    state.lastSpawn = ts;
+  }
+
+  for (const n of state.notes) {
+    if (!n.hit && !n.miss) {
+      n.y += NOTE_SPEED * state.spawnAccel;
+      if (n.y > HIT_Y + GOOD_WIN + 12) {
+        n.miss=true; state.combo=0; state.morale=Math.max(0,state.morale-5);
+        updateHUD(); showFeedback('Fallado','#E24B4A');
+      }
+    } else if (n.hit) { n.y -= 3; n.alpha -= 0.07; }
+    else if (n.miss) { n.alpha -= 0.06; }
+  }
+  state.notes = state.notes.filter(n => n.alpha > 0);
+
+  for (const p of state.particles) { p.x+=p.vx; p.y+=p.vy; p.vy+=0.15; p.alpha-=0.04; }
+  state.particles = state.particles.filter(p => p.alpha > 0);
+
+  if (state.morale <= 0) { endGame(); return; }
+  state.animId = requestAnimationFrame(loop);
+}
+
+function startGame() {
+  resetState();
+  updateHUD();
+  showScreen('screen-game');
+  playSelectedSong();
+  state.running = true;
+  state.lastTs = performance.now();
+  state.animId = requestAnimationFrame(loop);
+}
+
+function endGame() {
+  state.running = false;
+  cancelAnimationFrame(state.animId);
+  stopAudio();
+  const acc = state.totalNotes > 0 ? Math.round((state.hitNotes/state.totalNotes)*100) : 0;
+  const pct = state.totalNotes > 0 ? state.perfectNotes/state.totalNotes : 0;
+  let grade,title,sub;
+  if (acc>=95&&pct>0.7)  {grade='S';title='¡Leyenda del Norte!';       sub='Los dioses cantan tu nombre.';}
+  else if (acc>=85)       {grade='A';title='¡El drakkar surca glorioso!';sub='La tripulación vitoreó hasta las estrellas.';}
+  else if (acc>=70)       {grade='B';title='Bien tocado, enano.';        sub='El mar aplaudió tu ritmo.';}
+  else if (acc>=50)       {grade='C';title='Aceptable, pero mejorable.'; sub='Los marineros bostezaron un poco.';}
+  else                    {grade='D';title='La tripulación se rinde.';   sub='El drakkar pierde el rumbo...';}
+  document.getElementById('over-grade').textContent = grade;
+  document.getElementById('over-title').textContent = title;
+  document.getElementById('over-sub').textContent = sub;
+  document.getElementById('over-score').textContent = state.score.toLocaleString();
+  document.getElementById('over-combo').textContent = '×'+state.maxCombo;
+  document.getElementById('over-hits').textContent = state.hitNotes+'/'+state.totalNotes;
+  document.getElementById('over-acc').textContent = acc+'%';
+  showScreen('screen-over');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+document.addEventListener('keydown', e => {
+  const lane = KEYS.indexOf(e.key.toLowerCase());
+  if (lane >= 0) { e.preventDefault(); hitLane(lane); }
+});
+document.querySelectorAll('.touch-btn').forEach(btn => {
+  btn.addEventListener('pointerdown', e => { e.preventDefault(); hitLane(parseInt(btn.dataset.lane)); });
+});
+document.getElementById('btn-play').addEventListener('click', startGame);
+document.getElementById('btn-retry').addEventListener('click', startGame);
+document.getElementById('btn-menu').addEventListener('click', () => { stopAudio(); showScreen('screen-menu'); });
+</script>
+</body>
+</html>
