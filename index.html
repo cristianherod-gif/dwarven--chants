@@ -348,6 +348,8 @@ body {
     <div class="menu-nav">
       <button class="mnav-btn primary" id="btn-play"><span class="btn-icon">⚔</span> Iniciar Aventura</button>
       <button class="mnav-btn" id="btn-songs"><span class="btn-icon">♪</span> Seleccionar Canción</button>
+      <div id="song-list" style="display:none;width:100%;margin-top:4px;"></div>
+      <div style="margin-top:8px;" id="vol-menu-wrap"></div>
     </div>
   </div>
 
@@ -381,6 +383,7 @@ body {
   </div>
   <div id="song-title-bar">⚓ Navegando las aguas del Norte</div>
   <div id="audio-status"></div>
+  <div id="vol-game-wrap" style="display:flex;justify-content:center;margin-bottom:4px;"></div>
   <div id="canvas-container">
     <canvas id="gc" width="600" height="420"></canvas>
     <div id="feedback-popup"></div>
@@ -412,6 +415,7 @@ body {
   </div>
   <button class="menu-btn" id="btn-retry">↺ Otra vez</button>
   <button class="menu-btn secondary" id="btn-menu" style="margin-top:8px">⬅ Menú</button>
+  <div style="margin-top:12px;" id="vol-over-wrap"></div>
 </div>
 
 </div><!-- #app -->
@@ -422,7 +426,7 @@ body {
 // ═══════════════════════════════
 const SONGS = [
   { file: 'stormforge_oar_song.mp3', title: 'Stormforge Oar Song', icon: '⚓' },
-  // { file: 'cancion2.mp3', title: 'Halls of Stone', icon: '⛏️' },
+  { file: 'the_mountain.mp3', title: 'The Mountain', icon: '⛰️' },
 ];
 
 // Leaderboard (puedes editar los nombres y puntuaciones)
@@ -512,46 +516,106 @@ drawDrakkarMenu();
 // ── AUDIO ──
 let audio = new Audio();
 let selectedSong = 0;
-let paused = false;
+let globalVolume = 0.75;
+let globalMuted = false;
+
+function applyVolume() {
+  audio.volume = globalMuted ? 0 : globalVolume;
+  // Update all volume UIs
+  document.querySelectorAll('.vol-slider').forEach(s => s.value = globalVolume * 100);
+  document.querySelectorAll('.vol-mute').forEach(b => b.textContent = globalMuted ? '🔇' : '🔊');
+}
 
 function playSelectedSong() {
   if (!SONGS.length) return;
   const song = SONGS[selectedSong];
-  const statusEl = document.getElementById('audio-status');
   try {
     audio.pause();
     audio = new Audio();
     audio.loop = true;
-    audio.volume = 0.75;
-    audio.onerror = () => { statusEl.textContent = '⚠ No se encontró: ' + song.file; };
-    audio.oncanplaythrough = () => { audio.play().catch(e => { statusEl.textContent = '⚠ ' + e.message; }); };
-    audio.addEventListener('playing', () => { statusEl.textContent = ''; });
+    audio.volume = globalMuted ? 0 : globalVolume;
+    audio.onerror = () => {
+      const s = document.getElementById('audio-status');
+      if(s) s.textContent = '⚠ No se encontró: ' + song.file;
+    };
+    audio.oncanplaythrough = () => { audio.play().catch(()=>{}); };
     audio.src = song.file;
     audio.load();
-    document.getElementById('song-title-bar').textContent = '♪ ' + song.title;
-    statusEl.textContent = '';
+    const bar = document.getElementById('song-title-bar');
+    if(bar) bar.textContent = '♪ ' + song.title;
+    const s = document.getElementById('audio-status');
+    if(s) s.textContent = '';
   } catch(e) { console.error(e); }
 }
 
+// Keeps audio playing but updates title bar when switching screens
+function updateAudioUI() {
+  const bar = document.getElementById('song-title-bar');
+  if(bar && SONGS[selectedSong]) bar.textContent = audio.paused ? '♪ ' + SONGS[selectedSong].title : '♪ ' + SONGS[selectedSong].title;
+}
+
 function stopAudio() { audio.pause(); audio.currentTime = 0; }
-function togglePause() {
-  paused = !paused;
-  if (paused) { audio.pause(); } else { audio.play().catch(()=>{}); }
+
+// Volume control HTML snippet
+function volumeControlHTML(id) {
+  return `<div class="vol-ctrl" id="${id}" style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(0,0,0,0.3);border-radius:4px;border:1px solid rgba(212,160,23,0.2);">
+    <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:18px;padding:0;">🔊</button>
+    <input class="vol-slider" type="range" min="0" max="100" value="75" style="width:90px;accent-color:#D4A017;cursor:pointer;">
+  </div>`;
+}
+
+function setupVolumeControls() {
+  document.querySelectorAll('.vol-slider').forEach(slider => {
+    slider.value = globalVolume * 100;
+    slider.addEventListener('input', () => {
+      globalVolume = slider.value / 100;
+      globalMuted = false;
+      applyVolume();
+    });
+  });
+  document.querySelectorAll('.vol-mute').forEach(btn => {
+    btn.textContent = globalMuted ? '🔇' : '🔊';
+    btn.addEventListener('click', () => {
+      globalMuted = !globalMuted;
+      applyVolume();
+    });
+  });
 }
 
 // ── SCREEN MANAGER ──
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'screen-menu') drawDrakkarMenu();
+  if (id === 'screen-menu') { drawDrakkarMenu(); updateSongList(); }
   else cancelAnimationFrame(drakkarAnim);
+  setupVolumeControls();
 }
 
-// ── SONG SELECT (simple toggle for now) ──
-let songSelectOpen = false;
+// ── SONG SELECT ──
+function updateSongList() {
+  const list = document.getElementById('song-list');
+  if (!list) return;
+  list.innerHTML = SONGS.map((s,i) => `
+    <div class="song-card ${i===selectedSong?'selected':''}" data-idx="${i}" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${i===selectedSong?'rgba(120,80,10,0.4)':'rgba(20,17,10,0.8)'};border:1px solid ${i===selectedSong?'var(--gold)':'var(--gold-dark)'};border-radius:3px;cursor:pointer;transition:all 0.2s;margin-bottom:6px;">
+      <span style="font-size:20px">${s.icon}</span>
+      <div style="flex:1">
+        <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light)">${s.title}</div>
+        <div style="font-size:11px;color:var(--iron-light);font-style:italic">${s.file}</div>
+      </div>
+      ${i===selectedSong?'<span style="color:var(--gold)">▶</span>':''}
+    </div>`).join('');
+  document.querySelectorAll('.song-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedSong = parseInt(card.dataset.idx);
+      playSelectedSong();
+      updateSongList();
+    });
+  });
+}
+
 document.getElementById('btn-songs').addEventListener('click', () => {
-  if (SONGS.length <= 1) { alert('Solo hay una canción disponible.\nAñade más MP3 al proyecto.'); return; }
-  // Could expand to full song select screen
+  const list = document.getElementById('song-list');
+  list.style.display = list.style.display === 'none' ? 'block' : 'none';
 });
 
 // ── GAME CONSTANTS ──
@@ -760,17 +824,23 @@ function setPause(val) {
   pauseOverlay.classList.toggle('visible', val);
   if (val) audio.pause(); else audio.play().catch(()=>{});
 }
+  resetState(); updateHUD();
+  showScreen('screen-game');
+  if (audio.paused || audio.ended) playSelectedSong();
+  state.running=true; state.lastTs=performance.now();
+  state.animId=requestAnimationFrame(loop);
+}
 
 function startGame() {
   resetState(); updateHUD();
   showScreen('screen-game');
-  playSelectedSong();
+  if (audio.paused || audio.ended) playSelectedSong();
   state.running=true; state.lastTs=performance.now();
   state.animId=requestAnimationFrame(loop);
 }
 
 function endGame() {
-  state.running=false; cancelAnimationFrame(state.animId); stopAudio();
+  state.running=false; cancelAnimationFrame(state.animId);
   // Save score
   const acc=state.totalNotes>0?Math.round((state.hitNotes/state.totalNotes)*100):0;
   const pct=state.totalNotes>0?state.perfectNotes/state.totalNotes:0;
@@ -795,6 +865,20 @@ function endGame() {
   buildLeaderboard();
 }
 
+// ── INJECT VOLUME CONTROLS ──
+document.getElementById('vol-menu-wrap').innerHTML = volumeControlHTML('vol-menu');
+document.getElementById('vol-game-wrap').innerHTML = volumeControlHTML('vol-game');
+document.getElementById('vol-over-wrap').innerHTML = volumeControlHTML('vol-over');
+setupVolumeControls();
+
+// Start music on first interaction
+let musicStarted = false;
+function ensureMusic() {
+  if (!musicStarted) { musicStarted = true; playSelectedSong(); }
+}
+document.addEventListener('pointerdown', ensureMusic, { once: true });
+document.addEventListener('keydown', ensureMusic, { once: true });
+
 // ── INPUT ──
 document.addEventListener('keydown', e => {
   const lane = KEYS.indexOf(e.key.toLowerCase());
@@ -806,8 +890,8 @@ document.querySelectorAll('.touch-btn').forEach(btn=>{
 });
 document.getElementById('btn-play').addEventListener('click',startGame);
 document.getElementById('btn-retry').addEventListener('click',startGame);
-document.getElementById('btn-menu').addEventListener('click',()=>{stopAudio();showScreen('screen-menu');buildLeaderboard();});
-document.getElementById('btn-pause-menu').addEventListener('click',()=>{state.running=false;cancelAnimationFrame(state.animId);stopAudio();setPause(false);showScreen('screen-menu');buildLeaderboard();});
+document.getElementById('btn-menu').addEventListener('click',()=>{showScreen('screen-menu');buildLeaderboard();});
+document.getElementById('btn-pause-menu').addEventListener('click',()=>{state.running=false;cancelAnimationFrame(state.animId);setPause(false);showScreen('screen-menu');buildLeaderboard();});
 </script>
 </body>
 </html>
