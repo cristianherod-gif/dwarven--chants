@@ -314,7 +314,7 @@ body {
 
   <!-- Logo top center -->
   <div style="position:relative;z-index:1;text-align:center;padding-top:32px;">
-    <img src="Gemini_Generated_Image_66md2d66md2d66md-removebg-preview.png"
+    <img src="Gemini_Generated_Image_66md2d66md2d66md-remove-bg-io.png"
          alt="Dwarven Chants"
          style="max-width:min(600px,85vw);height:auto;mix-blend-mode:lighten;filter:drop-shadow(0 4px 32px rgba(212,160,23,0.4));margin-top:-10px;">
   </div>
@@ -333,37 +333,35 @@ body {
     <!-- Controls bottom-left -->
     <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);">
       <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:6px;">⚔ Controles</div>
-      <div style="font-size:12px;color:var(--iron-light);margin-bottom:7px;">Pulsa cuando la nota llegue al círculo</div>
+      <div style="font-size:13px;color:var(--iron-light);margin-bottom:8px;">Pulsa cuando la nota llegue al círculo</div>
       <div class="key-row" style="margin-top:0;justify-content:flex-start;">
-        <div class="key-badge"><kbd>A</kbd><div class="ldot" style="background:var(--lane0)"></div></div>
-        <div class="key-badge"><kbd>S</kbd><div class="ldot" style="background:var(--lane1)"></div></div>
-        <div class="key-badge"><kbd>D</kbd><div class="ldot" style="background:var(--lane2)"></div></div>
-        <div class="key-badge"><kbd>F</kbd><div class="ldot" style="background:var(--lane3)"></div></div>
+        <div class="key-badge"><kbd style="width:44px;height:44px;line-height:42px;font-size:16px;">A</kbd><div class="ldot" style="background:var(--lane0);width:10px;height:10px;"></div></div>
+        <div class="key-badge"><kbd style="width:44px;height:44px;line-height:42px;font-size:16px;">S</kbd><div class="ldot" style="background:var(--lane1);width:10px;height:10px;"></div></div>
+        <div class="key-badge"><kbd style="width:44px;height:44px;line-height:42px;font-size:16px;">D</kbd><div class="ldot" style="background:var(--lane2);width:10px;height:10px;"></div></div>
+        <div class="key-badge"><kbd style="width:44px;height:44px;line-height:42px;font-size:16px;">F</kbd><div class="ldot" style="background:var(--lane3);width:10px;height:10px;"></div></div>
       </div>
-      <div style="font-size:11px;color:var(--iron);margin-top:6px;">ESC → Pausa</div>
+      <div style="font-size:12px;color:var(--iron-light);margin-top:8px;letter-spacing:0.05em;">ESC → Pausa</div>
     </div>
 
     <!-- Language bottom-center -->
-    <div style="pointer-events:all;display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:4px;">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;">Idioma</div>
-      <div style="display:flex;gap:6px;">
-        <button id="btn-lang-es" onclick="setLang('es')"
-          style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:6px 16px;background:rgba(120,80,10,0.85);color:var(--gold-light);border:1px solid var(--gold);border-radius:3px;cursor:pointer;transition:all 0.2s;">
-          🇪🇸 ES
-        </button>
-        <button id="btn-lang-en" onclick="setLang('en')"
-          style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;padding:6px 16px;background:rgba(30,28,42,0.85);color:var(--iron-light);border:1px solid var(--iron);border-radius:3px;cursor:pointer;transition:all 0.2s;">
-          🇬🇧 EN
-        </button>
+    <div style="pointer-events:all;display:flex;flex-direction:column;align-items:center;gap:8px;padding-bottom:4px;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:12px 18px;backdrop-filter:blur(4px);">
+      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);text-transform:uppercase;">Idioma</div>
+      <div style="display:flex;gap:8px;">
+        <button id="btn-lang-es"
+          style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;padding:8px 20px;background:rgba(120,80,10,0.95);color:var(--gold-light);border:1.5px solid var(--gold);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
+          onclick="setLang('es')">🇪🇸 ES</button>
+        <button id="btn-lang-en"
+          style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;padding:8px 20px;background:rgba(30,28,42,0.95);color:var(--iron-light);border:1.5px solid var(--iron);border-radius:4px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 10px rgba(0,0,0,0.5);"
+          onclick="setLang('en')">🇬🇧 EN</button>
       </div>
     </div>
 
     <!-- Volume bottom-right -->
-    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:10px 14px;backdrop-filter:blur(4px);max-width:180px;">
-      <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:8px;">🔊 Sonido</div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:18px;padding:0;flex-shrink:0;">🔊</button>
-        <input class="vol-slider" type="range" min="0" max="100" value="75" style="width:80px;accent-color:#D4A017;cursor:pointer;">
+    <div style="pointer-events:all;background:rgba(8,7,12,0.82);border:1px solid rgba(212,160,23,0.18);border-radius:6px;padding:12px 16px;backdrop-filter:blur(4px);">
+      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.12em;color:var(--gold-dark);text-transform:uppercase;margin-bottom:10px;">🔊 Sonido</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="vol-mute" style="background:none;border:none;cursor:pointer;font-size:22px;padding:0;flex-shrink:0;line-height:1;">🔊</button>
+        <input class="vol-slider" type="range" min="0" max="100" value="75" style="width:90px;accent-color:#D4A017;cursor:pointer;height:6px;">
       </div>
     </div>
 
